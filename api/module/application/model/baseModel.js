@@ -117,16 +117,7 @@ class BaseModel {
             }
             let result = await model.create([document]);
             if (result instanceof Array) {
-                if (returnAll) {
-                    return result[0];
-                } else if (documentClass === "Wash") { // dla wizytówek zwracamy numer wizytówki i id dokumentu
-                    return {
-                        _id: _.get(result, '[0]._id', null),
-                        name: _.get(result, '[0].name', null)
-                    }
-                } else {
-                    return _.get(result, '[0]._id', null);
-                }
+                return result[0];
             } else {
                 throw new AppError("Wystąpił błąd przy zapisie dokumentu", 422);
             }
@@ -153,8 +144,8 @@ class BaseModel {
                 if (errors) {
                     throw errors;
                 }
-                let result = await model.updateOne({ _id: id }, { $set: document });
-                return id;
+                await model.updateOne({ _id: id }, { $set: document });
+                return document.toObject();
             } else {
                 throw new AppError('Nie znaleziono dokumentu', 404);
             }
