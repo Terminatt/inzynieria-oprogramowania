@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const applicationModuleConfig = require("./module/application/config");
-const ebookModuleConfig = require("./module/ebook/config");
+// const ebookModuleConfig = require("./module/ebook/config");
 let configInit = dotenv.config();
 if (configInit.error) {
     throw "Niepoprawna konfiguracja pliku '.env'."
@@ -59,7 +59,7 @@ app.get('/media/:name', (req, res, next) => {
 });
 
 app.use("/application", applicationModuleConfig);
-app.use("/ebook", ebookModuleConfig);
+// app.use("/ebook", ebookModuleConfig);
 
 //Zwrotka 404 dla nieistniejących routów
 app.use((req, res, next) => {
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    console.log(error.stack);
+    console.log(error.message);
     res.status(error.status || 500);
     let message = error.message;
     if (!error.status || error.status === 500) {

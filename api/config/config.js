@@ -14,7 +14,6 @@ module.exports = {
         JWT_SECRET: process.env.JWT_SECRET
     },
     settings: {
-        FAILED_LOGINS_BLOCK: 3, //Ilość nieudanych logowań do zablokowania konta
-        JWT_TOKEN_EXPIRE: 28800, //Ile czasu ważny jest token autoryzacyjny i użytkownik jest zalogowany
+        JWT_TOKEN_EXPIRE: 28800 //Ile czasu ważny jest token autoryzacyjny i użytkownik jest zalogowany
     }
 };
