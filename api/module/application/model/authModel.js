@@ -29,7 +29,7 @@ class AuthModel extends BaseModel {
                 let tokenPayload = _.pick(user, ["_id", "name"]);
                 tokenPayload.loginTime = Date.now();
 
-                const token = jwt.sign(tokenPayload, config.application.JWT_SECRET, {
+                const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
                     expiresIn: config.settings.JWT_TOKEN_EXPIRE
                 });
                 return { success: true, token: token, user: userPayload };
@@ -46,7 +46,7 @@ class AuthModel extends BaseModel {
         try {
             if (token) {
                 token = token.split(":")[1];
-                const result = await jwt.verify(token, config.application.JWT_SECRET);
+                const result = await jwt.verify(token, process.env.JWT_SECRET);
                 if (!!result) {
                     let user = await this.getModel(this.getDocumentClass()).findOne({ _id: result._id }).lean();
                     if (!user.active) {

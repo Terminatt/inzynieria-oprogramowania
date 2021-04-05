@@ -15,5 +15,17 @@ module.exports = {
     },
     settings: {
         JWT_TOKEN_EXPIRE: 28800 //Ile czasu ważny jest token autoryzacyjny i użytkownik jest zalogowany
-    }
+    },
+    mail: {
+        name: "ebooks",
+        host: 'mail22.mydevil.net',
+        port: 587,
+        auth: {
+            user: 'ebooks@overcloud.usermd.net',
+            pass: 'eWI6iiYJZCOv72xLHv3V'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    },
 };

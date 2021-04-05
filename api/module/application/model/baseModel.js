@@ -348,6 +348,23 @@ class BaseModel {
         return document;
     }
 
+    hasValidationErrors() {
+        return !_.isEmpty(this.validationErrors);
+    }
+
+    clearValidationErrors() {
+        _.set(this, 'validationErrors', {});
+    }
+
+    getValidationErrors() {
+        return this.validationErrors;
+    }
+
+    addValidationError(message, path) {
+        if (message && path) {
+            this.validationErrors[path] = message;
+        }
+    }
 
     parseValidationErrors(err) {
         let parsedErrors = {};
@@ -356,6 +373,10 @@ class BaseModel {
                 _.setWith(parsedErrors, path, obj.message, Object);
             });
         }
+        let customErrors = this.getValidationErrors();
+        _.each(customErrors, (message, path) => {
+            _.setWith(parsedErrors, path, message, Object);
+        });
         if (_.isEmpty(parsedErrors)) {
             parsedErrors["message"] = "Wystąpił nieznany błąd";
         }

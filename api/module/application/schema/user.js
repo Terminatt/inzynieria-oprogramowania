@@ -7,7 +7,7 @@ const userSchema = baseSchema.generateSchema(
     new Schema({
         active: {
             type: Boolean,
-            default: true,
+            default: false,
             required: [true, "Wartość jest wymagana"]
         },
         name: {
@@ -15,6 +15,15 @@ const userSchema = baseSchema.generateSchema(
             minlength: 1,
             required: [true, "Wartość jest wymagana"],
             minlength: [1, "Nieprawidłowa nazwa użytkownika"]
+        },
+        sex: {
+            type: String,
+            minlength: 1,
+            required: [true, "Wartość jest wymagana"],
+            enum: {
+                values: ["male", "female"],
+                message: "Nieprawidłowa wartość"
+            }
         },
         email: {
             type: String,

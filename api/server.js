@@ -58,7 +58,7 @@ app.get('/media/:name', (req, res, next) => {
     res.sendFile(name, { root: './media' });
 });
 
-app.use("/application", applicationModuleConfig);
+app.use("/", applicationModuleConfig);
 // app.use("/ebook", ebookModuleConfig);
 
 //Zwrotka 404 dla nieistniejących routów
