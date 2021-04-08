@@ -1,0 +1,10 @@
+// handle started
+export const HANDLE_USER_STARTED = "HANDLE_USER_STARTED";
+export const HANDLE_USER_FINISHED = "HANDLE_USER_FINISHED";
+export const HANDLE_USER_ERROR = "HANDLE_USER_ERROR";
+
+// register user
+export const REGISTER_USER_FINISHED = "REGISTER_USER_FINISHED";
+
+// login user
+export const LOGIN_USER_FINISHED = "LOGIN_USER_FINISHED";
