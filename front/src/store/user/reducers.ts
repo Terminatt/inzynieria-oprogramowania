@@ -11,7 +11,7 @@ const initialState: UserState = {
 
 
 
-export default function appReducer(state = initialState, action: UserActions): UserState {
+export default function userReducer(state = initialState, action: UserActions): UserState {
   switch (action.type) {
     case CONS.HANDLE_USER_STARTED:
       return {

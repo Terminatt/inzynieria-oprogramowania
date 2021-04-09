@@ -1,6 +1,14 @@
-import { Form, Input, Select } from 'antd';
-import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+// antd
+import Modal from 'antd/lib/modal/Modal';
+import { Button, Form, Input, Select } from 'antd';
+
+// redux
+import { AppState } from '../../store';
+import { loginUser, registerUser } from '../../store/user/actions';
+import { Sex } from '../../store/user/types';
 
 // css
 import './credentials.less';
@@ -10,12 +18,25 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+
 const { Option } = Select;
 
 
 export enum CredentialsType {
   REGISTER = "REGISTER",
   LOGIN = "LOGIN",
+}
+
+interface FormValues {
+  email: string;
+  password: string;
+  name?: string;
+  sex?: Sex;
+  repeat?: string;
+
 }
 
 
@@ -28,20 +49,43 @@ interface ComponentProps {
 function Credentials(props: ComponentProps) {
   const { visible, type, onClose } = props;
   const isLogin = type === CredentialsType.LOGIN;
+  const [form] = Form.useForm();
+  const dispatch = useDispatch()
 
+  const isLoading = useSelector((state: AppState) => state.user.isLoading)
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
+  const onReset = () => {
+    form.resetFields();
+  }
+
+  const onFinish = (values: FormValues) => {
+    const payload = {
+      ...values,
+      repeat: undefined,
+    }
+
+    if (type === CredentialsType.LOGIN) {
+      dispatch(loginUser(payload, onClose))
+    } else {
+      dispatch(registerUser(payload, onClose))
+    }
+  }
 
   return (
 
     <Modal
+      closable={false}
       title={isLogin ? "Zaloguj się" : "Zarejestruj się"}
-      onCancel={onClose}
+      okText="Zamknij"
+      cancelButtonProps={{ style: { display: "none" } }}
+      okButtonProps={{ disabled: isLoading, loading: isLoading }}
+      onOk={onClose}
       visible={visible}
     >
       <Form
+        onFinish={onFinish}
+        name="credentials"
+        form={form}
         {...layout}
 
       >
@@ -50,14 +94,16 @@ function Credentials(props: ComponentProps) {
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true }, { type: "email", message: "Email nie jest poprawny" }]}
+              rules={[{ required: true, message: "To pole jest wymagane" }, { type: "email", message: "Email nie jest poprawny" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="password"
               label="Hasło"
-              rules={[{ required: true }]}
+              rules={[
+                { required: true, message: "To pole jest wymagane" },
+              ]}
             >
               <Input.Password />
             </Form.Item>
@@ -65,29 +111,33 @@ function Credentials(props: ComponentProps) {
         ) : (
           <>
             <Form.Item
-              name="username"
+              name="name"
               label="Nazwa użytkownika"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: "To pole jest wymagane" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true }, { type: "email", message: "Email nie jest poprawny" }]}
+              rules={[{ required: true, message: "To pole jest wymagane" }, { type: "email", message: "Email nie jest poprawny" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="password"
               label="Hasło"
-              rules={[{ required: true }]}
+              rules={[
+                { required: true, message: "To pole jest wymagane" },
+                { pattern: /(?=.*[A-Z])/, message: "Hasło musi zawierać choć jedną dużą literę" },
+                { min: 6, message: "Hasło musi zawierać choć 6 znaków" }
+              ]}
             >
               <Input.Password />
             </Form.Item>
             <Form.Item
               dependencies={['password']}
-              name="repeat-password"
+              name="repeat"
               label="Powtórz hasło"
               rules={[
                 { required: true, message: "Powtórz swoje hasło" },
@@ -103,18 +153,26 @@ function Credentials(props: ComponentProps) {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item name="gender" label="Płeć" rules={[{ required: true }]}>
+            <Form.Item name="sex" label="Płeć" rules={[{ required: true, message: "To pole jest wymagane" }]}>
               <Select
                 placeholder="Płeć"
                 allowClear
               >
                 <Option value="male">Mężczyzna</Option>
                 <Option value="female">Kobieta</Option>
-                <Option value="other">Wolę nie podawać</Option>
               </Select>
             </Form.Item>
           </>
         )}
+
+        <Form.Item {...tailLayout}>
+          <Button disabled={isLoading} loading={isLoading} className="credentials-btn" type="primary" htmlType="submit">
+            {isLogin ? "Zaloguj się" : "Zarejestruj się"}
+          </Button>
+          <Button disabled={isLoading} loading={isLoading} className="credentials-btn" htmlType="button" onClick={onReset}>
+            Reset
+          </Button>
+        </Form.Item>
       </Form>
     </Modal>
   );

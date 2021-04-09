@@ -27,13 +27,17 @@ const handleError = (error: string) => {
 }
 
 // register user
-export const registerUser = (payload: RegisterPayload) => {
+export const registerUser = (payload: RegisterPayload, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
     dispatch(handleStarted())
     try {
       const results = await axios.post("/register", payload);
       dispatch(registerUserFinished(results.data))
       dispatch(handleFinished())
+
+      if (cb) {
+        cb();
+      }
     }
     catch (e: any) {
       dispatch(handleError(e));
@@ -51,13 +55,17 @@ const registerUserFinished = (data: any) => {
 // login user
 
 
-export const loginUser = (payload: LoginPayload) => {
+export const loginUser = (payload: LoginPayload, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
     dispatch(handleStarted())
     try {
       const results = await axios.post("/login", payload);
       dispatch(loginUserFinished(results.data))
       dispatch(handleFinished())
+
+      if (cb) {
+        cb();
+      }
     }
     catch (e: any) {
       dispatch(handleError(e));

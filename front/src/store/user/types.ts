@@ -6,19 +6,20 @@ export interface UserState {
 
 export interface User {
   name: string;
-  sex: Gender;
+  email: string;
+  sex: Sex;
 }
 
 
-export interface LoginPayload extends Pick<User, "name"> {
+export interface LoginPayload extends Pick<User, "email"> {
   password: string;
 }
 
-export interface RegisterPayload extends User {
+export interface RegisterPayload extends Partial<User> {
   password: string;
 }
 
-export enum Gender {
+export enum Sex {
   Male = "male",
   Female = "female",
 }
