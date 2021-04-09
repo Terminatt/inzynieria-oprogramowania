@@ -1,14 +1,16 @@
 import React from 'react';
-import { Button } from 'antd';
 
 // css
 import './App.less';
 import 'antd/dist/antd.less';
 
+// components
+import Navbar from './components/navbar/navbar';
+
 function App() {
   return (
     <div className="App">
-      <Button>Test</Button>
+      <Navbar />
     </div>
   );
 }
