@@ -74,6 +74,7 @@ function Credentials(props: ComponentProps) {
   return (
 
     <Modal
+      afterClose={onReset}
       closable={false}
       title={isLogin ? "Zaloguj się" : "Zarejestruj się"}
       okText="Zamknij"
