@@ -5,10 +5,8 @@ import * as CONS from "./constants";
 
 const initialState: UserState = {
   isLoading: false,
-  error: '',
+  error: null,
 }
-
-
 
 
 export default function userReducer(state = initialState, action: UserActions): UserState {

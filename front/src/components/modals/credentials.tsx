@@ -7,11 +7,12 @@ import { Button, Form, Input, Select } from 'antd';
 
 // redux
 import { AppState } from '../../store';
-import { loginUser, registerUser } from '../../store/user/actions';
+import { loginUser, registerUser, handleUserError } from '../../store/user/actions';
 import { Sex } from '../../store/user/types';
 
 // css
 import './credentials.less';
+import Errors from '../reusable/errors/errors';
 
 const layout = {
   labelCol: { span: 24 },
@@ -50,9 +51,10 @@ function Credentials(props: ComponentProps) {
   const { visible, type, onClose } = props;
   const isLogin = type === CredentialsType.LOGIN;
   const [form] = Form.useForm();
-  const dispatch = useDispatch()
 
+  const dispatch = useDispatch()
   const isLoading = useSelector((state: AppState) => state.user.isLoading)
+  const errors = useSelector((state: AppState) => state.user.error?.errors);
 
   const onReset = () => {
     form.resetFields();
@@ -71,6 +73,12 @@ function Credentials(props: ComponentProps) {
     }
   }
 
+  const onFormChange = () => {
+    if (errors) {
+      dispatch(handleUserError(null))
+    }
+  }
+
   return (
 
     <Modal
@@ -86,6 +94,7 @@ function Credentials(props: ComponentProps) {
       <Form
         onFinish={onFinish}
         name="credentials"
+        onValuesChange={onFormChange}
         form={form}
         {...layout}
 
@@ -175,6 +184,7 @@ function Credentials(props: ComponentProps) {
           </Button>
         </Form.Item>
       </Form>
+      <Errors className="credentials-errors" errors={errors} />
     </Modal>
   );
 }

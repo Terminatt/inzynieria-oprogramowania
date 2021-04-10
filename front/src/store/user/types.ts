@@ -1,7 +1,9 @@
+import { ErrorResponse } from "../base/BaseErrorResponse";
+
 export interface UserState {
   user?: User
   isLoading: boolean;
-  error: string;
+  error?: ErrorResponse | null;
 }
 
 export interface User {

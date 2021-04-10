@@ -1,6 +1,7 @@
 // core
 import { Dispatch } from "react";
 import axios from "../../axios/axios";
+import { ErrorResponse } from "../base/BaseErrorResponse";
 
 // redux
 import * as CONS from "./constants";
@@ -19,7 +20,7 @@ const handleFinished = () => {
   } as const
 }
 
-const handleError = (error: string) => {
+export const handleUserError = (error?: ErrorResponse | null) => {
   return {
     type: CONS.HANDLE_USER_ERROR,
     error,
@@ -40,7 +41,7 @@ export const registerUser = (payload: RegisterPayload, cb?: () => void) => {
       }
     }
     catch (e: any) {
-      dispatch(handleError(e));
+      dispatch(handleUserError(e?.response?.data));
     }
   };
 }
@@ -68,7 +69,8 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
       }
     }
     catch (e: any) {
-      dispatch(handleError(e));
+
+      dispatch(handleUserError(e?.response?.data));
     }
   };
 }
@@ -80,6 +82,6 @@ const loginUserFinished = (data: any) => {
   } as const
 }
 
-export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleError |
+export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError |
   typeof registerUserFinished | typeof loginUserFinished
 >
