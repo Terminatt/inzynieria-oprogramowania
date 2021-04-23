@@ -14,6 +14,6 @@ export default abstract class Utils {
   }
 
   public static setAxiosHeaders = (token: string, instance: AxiosInstance): void => {
-    Object.assign(instance.defaults, { headers: { authorization: 'token' } });
+    Object.assign(instance.defaults, { headers: { authorization: token } });
   }
 }
