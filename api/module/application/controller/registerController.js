@@ -11,7 +11,7 @@ class RegisterController extends BaseController {
         try {
             const data = req.body;
             const result = await this.getModel().register(data);
-            res.status(201).send({ success: true, document: result });
+            res.status(201).send({ success: true });
         } catch (err) {
             next(err);
         }
