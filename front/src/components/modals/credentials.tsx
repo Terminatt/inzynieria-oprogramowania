@@ -13,6 +13,7 @@ import { Sex } from '../../store/user/types';
 // css
 import './credentials.less';
 import Errors from '../reusable/errors/errors';
+import { useHistory } from 'react-router';
 
 const layout = {
   labelCol: { span: 24 },
@@ -51,6 +52,7 @@ function Credentials(props: ComponentProps) {
   const { visible, type, onClose } = props;
   const isLogin = type === CredentialsType.LOGIN;
   const [form] = Form.useForm();
+  const history = useHistory();
 
   const dispatch = useDispatch()
   const isLoading = useSelector((state: AppState) => state.user.isLoading)
@@ -67,7 +69,10 @@ function Credentials(props: ComponentProps) {
     }
 
     if (type === CredentialsType.LOGIN) {
-      dispatch(loginUser(payload, onClose))
+      dispatch(loginUser(payload, () => {
+        onClose();
+        history.push("/main")
+      }))
     } else {
       dispatch(registerUser(payload, onClose))
     }

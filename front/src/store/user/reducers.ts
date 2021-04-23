@@ -27,7 +27,6 @@ export default function userReducer(state = initialState, action: UserActions): 
         isLoading: false,
         error: action.error,
       }
-    case CONS.REGISTER_USER_FINISHED:
     case CONS.LOGIN_USER_FINISHED:
       return {
         ...state,

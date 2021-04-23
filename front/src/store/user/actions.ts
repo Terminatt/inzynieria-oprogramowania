@@ -1,11 +1,14 @@
 // core
+import { notification } from "antd";
 import { Dispatch } from "react";
 import axios from "../../axios/axios";
+import Utils from "../../utils/utls";
 import { ErrorResponse } from "../base/BaseErrorResponse";
+import BaseResponse from "../base/BaseResponse";
 
 // redux
 import * as CONS from "./constants";
-import { LoginPayload, RegisterPayload } from "./types";
+import { LoginPayload, LoginResponse, RegisterPayload } from "./types";
 
 // handle loading
 const handleStarted = () => {
@@ -32,10 +35,10 @@ export const registerUser = (payload: RegisterPayload, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
     dispatch(handleStarted())
     try {
-      const results = await axios.post("/register", payload);
-      dispatch(registerUserFinished(results.data))
+      await axios.post<BaseResponse>("/register", payload);
       dispatch(handleFinished())
 
+      notification.success({ message: "Konto zostało utworzone", description: "Na podany adres email został wysłany mail aktywacyjny", duration: 3000 })
       if (cb) {
         cb();
       }
@@ -46,23 +49,16 @@ export const registerUser = (payload: RegisterPayload, cb?: () => void) => {
   };
 }
 
-const registerUserFinished = (data: any) => {
-  return {
-    type: CONS.REGISTER_USER_FINISHED,
-    data,
-  } as const
-}
-
 // login user
-
-
 export const loginUser = (payload: LoginPayload, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
     dispatch(handleStarted())
     try {
-      const results = await axios.post("/login", payload);
-      dispatch(loginUserFinished(results.data))
+      const results = await axios.post<LoginResponse>("/login", payload);
+      dispatch(loginUserFinished(results.data.document))
       dispatch(handleFinished())
+
+      Utils.setToken(results.data.token);
 
       if (cb) {
         cb();
@@ -70,6 +66,27 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
     }
     catch (e: any) {
 
+      dispatch(handleUserError(e?.response?.data));
+    }
+  };
+}
+
+// is authorized
+export const isAuth = (token: string, cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>) => {
+    dispatch(handleStarted())
+    try {
+      const results = await axios.post<LoginResponse>("/isAuth", token);
+      dispatch(loginUserFinished(results.data.document))
+      dispatch(handleFinished())
+
+      Utils.setToken(results.data.token);
+
+      if (cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
       dispatch(handleUserError(e?.response?.data));
     }
   };
@@ -82,6 +99,6 @@ const loginUserFinished = (data: any) => {
   } as const
 }
 
-export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError |
-  typeof registerUserFinished | typeof loginUserFinished
->
+
+
+export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished>
