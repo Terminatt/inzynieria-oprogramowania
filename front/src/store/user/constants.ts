@@ -8,3 +8,6 @@ export const REGISTER_USER_FINISHED = "REGISTER_USER_FINISHED";
 
 // login user
 export const LOGIN_USER_FINISHED = "LOGIN_USER_FINISHED";
+
+// isAuth
+export const IS_USER_AUTH_FINISHED = "IS_USER_AUTH_FINISHED"

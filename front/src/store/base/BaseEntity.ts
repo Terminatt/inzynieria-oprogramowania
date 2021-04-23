@@ -1,3 +1,3 @@
 export interface BaseEntity {
-  id: string | number;
+  _id: string | number;
 }
