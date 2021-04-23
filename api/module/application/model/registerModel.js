@@ -33,7 +33,7 @@ class RegisterModel extends BaseModel {
 
                 await registerToken.save();
                 await MailService.sendRegisterMail(document, tokenString);
-                return _.omit(result[0], ["password"]);
+                return true;
             } else {
                 throw new AppError("Wystąpił błąd przy zapisie dokumentu", 422);
             }
