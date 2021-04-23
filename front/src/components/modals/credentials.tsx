@@ -83,7 +83,8 @@ function Credentials(props: ComponentProps) {
 
     <Modal
       afterClose={onReset}
-      closable={false}
+      maskClosable={true}
+      onCancel={onClose}
       title={isLogin ? "Zaloguj się" : "Zarejestruj się"}
       okText="Zamknij"
       cancelButtonProps={{ style: { display: "none" } }}
