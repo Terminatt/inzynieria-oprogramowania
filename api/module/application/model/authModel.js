@@ -45,7 +45,6 @@ class AuthModel extends BaseModel {
     async isAuth(token) {
         try {
             if (token) {
-                token = token.split(":")[1];
                 const result = await jwt.verify(token, process.env.JWT_SECRET);
                 if (!!result) {
                     let user = await this.getModel(this.getDocumentClass()).findOne({ _id: result._id }).lean();

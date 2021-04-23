@@ -6,9 +6,8 @@ const _ = require("lodash");
 
 module.exports = async (req, res, next) => {
   try {
-    const tokenExists = req.headers['authorization'] ? req.headers['authorization'].startsWith('JWT:') : null;
-    if (tokenExists) {
-      const token = req.headers['authorization'].split(":")[1];
+    const token = req.headers['authorization'];
+    if (token) {
       let decoded = jwt.verify(token, config.application.JWT_SECRET);
       if (!!decoded) {
         if (mongoose.modelNames().indexOf("User") === -1) {
