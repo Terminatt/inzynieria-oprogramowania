@@ -59,6 +59,7 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);
+      Utils.setAxiosHeaders(results.data.token, axios);
 
       if (cb) {
         cb();
@@ -74,13 +75,15 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
 // is authorized
 export const isAuth = (token: string, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
+    Utils.setAxiosHeaders(token, axios);
     dispatch(handleStarted())
     try {
-      const results = await axios.post<LoginResponse>("/isAuth", token);
+      const results = await axios.get<LoginResponse>("/isAuth");
       dispatch(loginUserFinished(results.data.document))
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);
+      Utils.setAxiosHeaders(results.data.token, axios);
 
       if (cb) {
         cb();
