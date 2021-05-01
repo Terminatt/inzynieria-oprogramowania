@@ -1,7 +1,9 @@
 @import "../../styles/variables.less";
 @import "../../styles/mixins.less";
+@import "../../styles/colors.less";
 
 .landing {
+  .gradient();
   .vertical-center();
   height: 100%;
 
@@ -12,6 +14,12 @@
   }
 
   &__text {
-    padding-right: 2em;
+    margin-right: 2em;
   }
+
+  &__btn {
+    width: calc(100% - 40px);
+    border-radius: 6px !important;
+  }
+
 }

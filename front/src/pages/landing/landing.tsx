@@ -2,7 +2,7 @@
 import React from 'react';
 
 // antd
-import { Col, Layout, Row } from 'antd';
+import { Button, Col, Layout, Row } from 'antd';
 
 // custom
 import LandingParagraph from "../../components/landing-paragraph/landing-paragraph";
@@ -29,6 +29,7 @@ function Landing() {
             Aut nostrum porro velit reprehenderit, debitis quasi esse molestias pariatur cumque fugiat quidem asperiores
             in blanditiis quibusdam fuga laudantium tempora atque quis?
           </LandingParagraph>
+          <Button className="landing__text landing__btn" size="large" type="primary">Zacznij teraz!</Button>
         </Col>
         <Col lg={12}>
           <img className="rounded-img" src={Books} alt="ksiazki" />
