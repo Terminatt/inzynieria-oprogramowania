@@ -14,6 +14,8 @@ import { Sex } from '../../store/user/types';
 import './credentials.less';
 import Errors from '../reusable/errors/errors';
 import { useHistory } from 'react-router';
+import { ModalType } from '../../store/modals/types';
+import { closeModal } from '../../store/modals/actions';
 
 const layout = {
   labelCol: { span: 24 },
@@ -27,11 +29,6 @@ const tailLayout = {
 const { Option } = Select;
 
 
-export enum CredentialsType {
-  REGISTER = "REGISTER",
-  LOGIN = "LOGIN",
-}
-
 interface FormValues {
   email: string;
   password: string;
@@ -42,21 +39,20 @@ interface FormValues {
 }
 
 
-interface ComponentProps {
-  visible: boolean;
-  type: CredentialsType
-  onClose: () => void;
-}
-
-function Credentials(props: ComponentProps) {
-  const { visible, type, onClose } = props;
-  const isLogin = type === CredentialsType.LOGIN;
+function Credentials() {
+  const modalsState = useSelector((state: AppState) => state.modals);
+  const { isOpen } = modalsState;
+  const isLogin = modalsState.type === ModalType.LOGIN;
   const [form] = Form.useForm();
   const history = useHistory();
 
   const dispatch = useDispatch()
   const isLoading = useSelector((state: AppState) => state.user.isLoading)
   const errors = useSelector((state: AppState) => state.user.error?.errors);
+
+  const onClose = () => {
+    dispatch(closeModal());
+  }
 
   const onReset = () => {
     form.resetFields();
@@ -68,7 +64,7 @@ function Credentials(props: ComponentProps) {
       repeat: undefined,
     }
 
-    if (type === CredentialsType.LOGIN) {
+    if (isLogin) {
       dispatch(loginUser(payload, () => {
         onClose();
         history.push("/main")
@@ -95,7 +91,7 @@ function Credentials(props: ComponentProps) {
       cancelButtonProps={{ style: { display: "none" } }}
       okButtonProps={{ disabled: isLoading, loading: isLoading }}
       onOk={onClose}
-      visible={visible}
+      visible={isOpen}
     >
       <Form
         onFinish={onFinish}

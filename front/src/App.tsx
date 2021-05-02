@@ -17,6 +17,8 @@ import Main from './pages/main/main';
 // utils
 import Utils from './utils/utls';
 import { isAuth } from './store/user/actions';
+import Footer from './components/footer/footer';
+import { Layout } from 'antd';
 
 function App() {
   const dispatch = useDispatch();
@@ -33,17 +35,20 @@ function App() {
 
   }, [dispatch, history])
   return (
-    <div className="App">
-      <Navbar />
-      <Switch>
-        <Route path="/main">
-          <Main />
-        </Route>
-        <Route path="/">
-          <Landing />
-        </Route>
-      </Switch>
-    </div>
+    <main className="app">
+      <Layout className="app__content">
+        <Navbar />
+        <Switch>
+          <Route path="/main">
+            <Main />
+          </Route>
+          <Route path="/">
+            <Landing />
+          </Route>
+        </Switch>
+        <Footer />
+      </Layout>
+    </main>
   );
 }
 

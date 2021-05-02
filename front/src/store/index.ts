@@ -5,9 +5,11 @@ import thunk from 'redux-thunk';
 
 // reducers
 import userReducer from './user/reducers';
+import modalsReducer from "./modals/reducers";
 
 const rootReducer = combineReducers({
-  user: userReducer
+  user: userReducer,
+  modals: modalsReducer,
 })
 
 

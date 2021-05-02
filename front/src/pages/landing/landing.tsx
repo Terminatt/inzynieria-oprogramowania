@@ -1,8 +1,13 @@
 // core
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
+// redux
+import { openModal } from '../../store/modals/actions';
+import { ModalType } from '../../store/modals/types';
 
 // antd
-import { Button, Col, Layout, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 
 // custom
 import LandingParagraph from "../../components/landing-paragraph/landing-paragraph";
@@ -13,12 +18,19 @@ import Books from "../../img/svg/books.svg";
 
 // css
 import "./landing.less";
+import Credentials from '../../components/modals/credentials';
 
 // components
 
 function Landing() {
+  const dispatch = useDispatch();
+
+  const openRegister = () => {
+    dispatch(openModal(ModalType.REGISTER));
+  }
+
   return (
-    <Layout className="landing">
+    <div className="ant-layout landing">
       <Row className="landing__content">
         <Col lg={12}>
           <LandingHeading className="landing__text">
@@ -29,13 +41,14 @@ function Landing() {
             Aut nostrum porro velit reprehenderit, debitis quasi esse molestias pariatur cumque fugiat quidem asperiores
             in blanditiis quibusdam fuga laudantium tempora atque quis?
           </LandingParagraph>
-          <Button className="landing__text landing__btn" size="large" type="primary">Zacznij teraz!</Button>
+          <Button onClick={openRegister} className="landing__text landing__btn" size="large" type="primary">Zacznij teraz!</Button>
         </Col>
         <Col lg={12}>
           <img height="100%" className="rounded-img" src={Books} alt="ksiazki" />
         </Col>
       </Row>
-    </Layout>
+      <Credentials />
+    </div>
   );
 }
 
