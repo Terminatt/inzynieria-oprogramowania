@@ -32,7 +32,7 @@ function Landing() {
           <Button className="landing__text landing__btn" size="large" type="primary">Zacznij teraz!</Button>
         </Col>
         <Col lg={12}>
-          <img className="rounded-img" src={Books} alt="ksiazki" />
+          <img height="100%" className="rounded-img" src={Books} alt="ksiazki" />
         </Col>
       </Row>
     </Layout>
