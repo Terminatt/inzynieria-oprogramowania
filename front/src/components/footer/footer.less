@@ -1,8 +1,9 @@
 @import '../../styles/colors.less';
 @import '../../styles/typo.less';
 @import '../../styles/mixins.less';
+@import '../../styles/variables.less';
 
-.footer {
+.custom-footer {
   background-color: @primary;
   color: @color-white;
   padding: 0.5em;
@@ -10,4 +11,10 @@
   font-weight: @footer-font-weight;
 
   .box-shadow-big();
+
+  .breakpoint(@xs, {
+      text-align: center;
+    }
+
+  );
 }

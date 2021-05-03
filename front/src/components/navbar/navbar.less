@@ -1,6 +1,6 @@
 @import "../../styles/colors.less";
 @import "../../styles/mixins.less";
-@import "../../styles/mixins.less";
+@import "../../styles/variables.less";
 
 .navbar {
   background-color: @primary;
@@ -9,31 +9,29 @@
   height: 70px;
   .box-shadow-big();
 
-  .navbar__content {
+  &__content {
     width: 100%;
     height: 100%;
-
-
-    .navbar__flex {
-      .vertical-center();
-    }
-
-    .navbar__right {
-      .horizontal-end();
-    }
-
-    h1 {
-      color: @color-white;
-    }
-
-    .brand {
-      height: max-content;
-      margin-left: 1.5em;
-    }
-
-    .navbar__right-btn {
-      margin-right: 1em
-    }
   }
 
+  &__flex {
+    .vertical-center();
+  }
+
+  &__collogin {
+    .horizontal-end();
+  }
+
+  h1 {
+    color: @color-white;
+  }
+
+  &__brand {
+    height: max-content;
+    margin-left: 1.5em;
+  }
+
+  &__right-btn {
+    margin-right: 1em
+  }
 }

@@ -12,8 +12,11 @@ function Footer() {
 
 
   return (
-    <Row className="footer" justify="center">
-      &copy; Copyright {new Date().getFullYear()}, Projekt Nazwa Robocza Dev Team
+    <Row className="custom-footer" justify="center">
+      <span>
+        &copy; Copyright {new Date().getFullYear()},&nbsp;
+      </span>
+      <span>Projekt Nazwa Robocza Dev Team</span>
     </Row>
   );
 }

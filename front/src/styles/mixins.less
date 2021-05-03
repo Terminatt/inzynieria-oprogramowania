@@ -1,17 +1,17 @@
 @import "./colors.less";
 
 .vertical-center() {
-  display: flex;
+  display: flex !important;
   align-items: center;
 }
 
 .horizontal-end() {
-  display: flex;
+  display: flex !important;
   justify-content: flex-end;
 }
 
 .horizontal-center() {
-  display: flex;
+  display: flex !important;
   justify-content: center;
 }
 
@@ -24,4 +24,10 @@
   position: relative;
   box-shadow: 0px 1px 21px -5px rgba(0, 0, 0, 0.75);
   z-index: 10;
+}
+
+.breakpoint(@val, @content) {
+  @media only screen and (max-width: @val) {
+    @content();
+  }
 }

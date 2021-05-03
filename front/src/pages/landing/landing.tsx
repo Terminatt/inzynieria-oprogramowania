@@ -32,19 +32,19 @@ function Landing() {
   return (
     <div className="ant-layout landing">
       <Row className="landing__content">
-        <Col lg={12}>
-          <LandingHeading className="landing__text">
+        <Col className="landing__coltext" xs={24} lg={12}>
+          <LandingHeading className="landing__text landing__h">
             Zacznij nową przygodę z książkami!
           </LandingHeading>
-          <LandingParagraph className="landing__text">
+          <LandingParagraph className="landing__text landing__p">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
             Aut nostrum porro velit reprehenderit, debitis quasi esse molestias pariatur cumque fugiat quidem asperiores
             in blanditiis quibusdam fuga laudantium tempora atque quis?
           </LandingParagraph>
           <Button onClick={openRegister} className="landing__text landing__btn" size="large" type="primary">Zacznij teraz!</Button>
         </Col>
-        <Col lg={12}>
-          <img height="100%" className="rounded-img" src={Books} alt="ksiazki" />
+        <Col className="landing__colimg" xs={24} lg={12}>
+          <img height="100%" className="landing__img rounded-img" src={Books} alt="ksiazki" />
         </Col>
       </Row>
       <Credentials />

@@ -10,7 +10,7 @@
   &__content {
     padding-top: 10em;
     padding-bottom: 2em;
-    width: @landing-width;
+    max-width: @landing-width;
   }
 
   &__text {
@@ -22,4 +22,39 @@
     border-radius: 6px !important;
   }
 
+
+  .breakpoint(@xs, {
+      &__content {
+        padding: 2em 0.5em 2em 0.5em;
+        text-align: center;
+        overflow-y: auto;
+      }
+
+      &__coltext {
+        order: 2
+      }
+
+      &__colimg {
+        order: 1;
+        margin-bottom: 0.5em;
+      }
+
+      &__text {
+        margin-right: 0;
+      }
+
+      &__h {
+        font-size: 24px;
+      }
+
+      &__p {
+        font-size: 16px;
+      }
+
+      &__img {
+        width: 100%;
+      }
+    }
+
+  );
 }
