@@ -22,8 +22,12 @@
     border-radius: 6px !important;
   }
 
+  &__img {
+    width: 100%;
+  }
 
-  .breakpoint(@xs, {
+
+  .breakpoint(@lg, {
       &__content {
         padding: 2em 0.5em 2em 0.5em;
         text-align: center;
@@ -51,8 +55,34 @@
         font-size: 16px;
       }
 
-      &__img {
-        width: 100%;
+    }
+
+  );
+
+  .breakpoint(1380, {
+      &__h {
+        font-size: 32px;
+      }
+
+      &__p {
+        font-size: 24px;
+      }
+    }
+
+  );
+
+  .breakpoint(@xxl, {
+      &__content {
+        padding-left: 2em;
+        padding-right: 2em;
+      }
+
+      &__h {
+        font-size: 36px;
+      }
+
+      &__p {
+        font-size: 30px;
       }
     }
 
