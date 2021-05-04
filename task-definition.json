@@ -4,13 +4,27 @@
       "name": "web",
       "memory": 200,
       "cpu": 10,
-      "essential": true
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ]
     },
     {
       "name": "app",
       "memory": 200,
       "cpu": 10,
-      "essential": true
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3001,
+          "hostPort": 3001,
+          "protocol": "tcp"
+        }
+      ]
     }
   ],
   "family": "ebooks-build-task"
