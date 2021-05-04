@@ -1,3 +1,16 @@
 {
-  "containerDefinitions": []
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "memory": 200,
+      "cpu": 10,
+      "essential": true
+    },
+    {
+      "name": "app",
+      "memory": 200,
+      "cpu": 10,
+      "essential": true
+    }
+  ]
 }
