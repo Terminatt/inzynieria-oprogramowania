@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
     - name: Login to ECR
       id: ecr
       uses: elgohr/ecr-login-action@master
@@ -13,6 +14,7 @@ jobs:
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ${{ secrets.AWS_REGION }}
     - name: Publish api to Registry
+
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: api/repository
@@ -20,6 +22,7 @@ jobs:
         password: ${{ steps.ecr.outputs.password }}
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: api/api.dockerfile
+
     - name: Publish frontend to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
@@ -28,3 +31,26 @@ jobs:
         password: ${{ steps.ecr.outputs.password }}
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: front/frontend.dockerfile
+
+    - name: Render Amazon ECS task definition for first container
+      id: render-web-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: web
+        image: api/repository:latest
+
+    - name: Modify Amazon ECS task definition with second container
+      id: render-app-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+        container-name: app
+        image: frontend/repository:latest
+
+    - name: Deploy to Amazon ECS service
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
+        service: ebooks-service
+        cluster: ebooks-cluster
