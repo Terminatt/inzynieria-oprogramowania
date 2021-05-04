@@ -13,8 +13,8 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ${{ secrets.AWS_REGION }}
-    - name: Publish api to Registry
 
+    - name: Publish api to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: api/repository
@@ -22,6 +22,14 @@ jobs:
         password: ${{ steps.ecr.outputs.password }}
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: api/api.dockerfile
+
+    - name: Render Amazon ECS task definition for first container
+      id: render-web-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: web
+        image: ${{ steps.ecr.outputs.registry }}
 
     - name: Publish frontend to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
@@ -32,21 +40,13 @@ jobs:
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: front/frontend.dockerfile
 
-    - name: Render Amazon ECS task definition for first container
-      id: render-web-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition.json
-        container-name: web
-        image: api/repository:latest
-
     - name: Modify Amazon ECS task definition with second container
       id: render-app-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
         container-name: app
-        image: frontend/repository:latest
+        image: ${{ steps.ecr.outputs.registry }}
 
     - name: Deploy to Amazon ECS service
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
