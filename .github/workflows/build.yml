@@ -12,13 +12,19 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ${{ secrets.AWS_REGION }}
-    - name: Publish to Registry
+    - name: Publish api to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: myDocker/repository
+        name: api/repository
         username: ${{ steps.ecr.outputs.username }}
         password: ${{ steps.ecr.outputs.password }}
         registry: ${{ steps.ecr.outputs.registry }}
-        dockerfile:
-          - api/api.dockerfile
-          - front/frontend.dockerfile
+        dockerfile: api/api.dockerfile front/frontend.dockerfile
+    - name: Publish frontend to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: frontend/repository
+        username: ${{ steps.ecr.outputs.username }}
+        password: ${{ steps.ecr.outputs.password }}
+        registry: ${{ steps.ecr.outputs.registry }}
+        dockerfile: front/frontend.dockerfile
