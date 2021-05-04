@@ -12,5 +12,6 @@
       "cpu": 10,
       "essential": true
     }
-  ]
+  ],
+  "family": "ebooks-build-task"
 }
