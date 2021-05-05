@@ -31,7 +31,7 @@ jobs:
         dockerfile: api/api.dockerfile
 
     - name: Render Amazon ECS task definition for first container
-      id: render-web-container
+      id: render-app-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition-api.json
@@ -41,7 +41,7 @@ jobs:
     - name: Deploy to Amazon ECS service
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
         service: ebooks-service-app
         cluster: ebooks-cluster
 
@@ -55,7 +55,7 @@ jobs:
         dockerfile: front/frontend.dockerfile
 
     - name: Modify Amazon ECS task definition with second container
-      id: render-app-container
+      id: render-web-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition-front.json
@@ -65,6 +65,6 @@ jobs:
     - name: Deploy to Amazon ECS service
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
         service: ebooks-service-web
         cluster: ebooks-cluster
