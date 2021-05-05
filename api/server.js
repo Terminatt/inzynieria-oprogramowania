@@ -92,6 +92,6 @@ app.use((error, req, res, next) => {
     }
 });
 
-app.listen(3001, null, () => {
-    console.log("Server is listening on port 3001")
+app.listen(process.env.PORT || 3001, null, () => {
+    console.log(`Server is listening on port ${process.env.PORT || 3001}`)
 });
