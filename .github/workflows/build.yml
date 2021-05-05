@@ -58,8 +58,8 @@ jobs:
           docker_options: "--no-cache"
           process_type: web
 
-        - name: "Memory fix"
-          run: "heroku config:set NODE_OPTIONS=\"--max_old_space_size=2560\" -a ebooks-front"
+      - name: "Memory fix"
+        run: "heroku config:set NODE_OPTIONS=\"--max_old_space_size=2560\" -a ebooks-front"
 
       - name: Release Front-End.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
