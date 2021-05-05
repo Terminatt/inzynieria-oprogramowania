@@ -25,12 +25,13 @@ jobs:
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> ./api/.env
           echo ADMIN_KEY=${{ secrets.ADMIN_KEY }} >> ./api/.env
           cat ./api/.env
-      - name: Create env file for api
+          
+      - name: Create env file for front
         run: |
           touch ./front/.env
           echo REACT_APP_PROXY_API=${{ secrets.REACT_APP_PROXY_API }} >> ./front/.env
           cat ./front/.env
-          
+
       - name: "Login to Heroku"
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
