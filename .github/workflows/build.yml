@@ -59,7 +59,7 @@ jobs:
           process_type: web
 
         - name: "Memory fix"
-          run: heroku config:set NODE_OPTIONS="--max_old_space_size=2560" -a ${{ secrets.HEROKU_APP_NAME_FRONT }}
+          run: "heroku config:set NODE_OPTIONS="--max_old_space_size=2560" -a ebooks-front"
 
       - name: Release Front-End.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
