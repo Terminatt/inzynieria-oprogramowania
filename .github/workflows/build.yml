@@ -15,27 +15,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Make envfile for api
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_DEBUG: false
-          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          envkey_DB_PASS: ${{ secrets.DB_PASS }}
-          envkey_DB_HOST: ${{ secrets.DB_HOST }}
-          envkey_DB_DBNAME: ${{ secrets.DB_DBNAME }}
-          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
-          directory: ./api
-          file_name: .env
-      
-      - name: Make envfile for front
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_DEBUG: false
-          envkey_REACT_APP_PROXY_API: ${{ secrets.REACT_APP_PROXY_API }}
-          directory: ./front
-          file_name: .env
-
+      - name: Create env file for api
+        run: |
+          touch ./api/.env
+          echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> ./api/.env
+          echo DB_PASS=${{ secrets.DB_USERNAME }} >> ./api/.env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> ./api/.env
+          echo DB_DBNAME=${{ secrets.DB_DBNAME }} >> ./api/.env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> ./api/.env
+          echo ADMIN_KEY=${{ secrets.ADMIN_KEY }} >> ./api/.env
+          cat ./api/.env
+      - name: Create env file for api
+        run: |
+          touch ./front/.env
+          echo REACT_APP_PROXY_API=${{ secrets.REACT_APP_PROXY_API }} >> ./front/.env
+          cat ./front/.env
+          
       - name: "Login to Heroku"
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
