@@ -1,0 +1,18 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "memory": 200,
+      "cpu": 10,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ],
+  "family": "ebooks-build-api-task"
+}
