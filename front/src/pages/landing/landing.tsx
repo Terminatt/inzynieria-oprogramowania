@@ -33,8 +33,8 @@ function Landing() {
     <div className="ant-layout landing">
       <Row className="landing__content">
         <Col className="landing__coltext" xs={24} lg={12}>
-          <LandingHeading className="landing__text landing__h">
-            Zacznij nową przygodę z książkami!
+          <LandingHeading className="landing__text landing__h">t
+          Zacznij nową przygodę z książkami!
           </LandingHeading>
           <LandingParagraph className="landing__text landing__p">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
