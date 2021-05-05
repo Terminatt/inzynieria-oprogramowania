@@ -36,12 +36,13 @@ global.appRoot = path.resolve(__dirname);
 
 //zabezpieczenia: cors, headery, limit requestów
 var corsOptions = {
-    origin: ["http://localhost:3000"],
+    origin: process.env.FRONT_HOST,
     optionsSuccessStatus: 200
 }
 
 app.use(cors(corsOptions));
 app.use(helmet());
+app.options('*', cors(corsOptions))
 
 //parsery
 app.use(bodyParser.json({
@@ -92,6 +93,6 @@ app.use((error, req, res, next) => {
     }
 });
 
-app.listen(3001, null, () => {
-    console.log("Server is listening on port 3001")
+app.listen(process.env.PORT || 3001, null, () => {
+    console.log(`Server is listening on port ${process.env.PORT || 3001}`)
 });

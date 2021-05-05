@@ -1,70 +1,71 @@
-name: Publish Docker
-on: [push]
+# Your workflow name.
+name: Deploy to heroku.
+
+# Run workflow on every push to master branch.
+on:
+  push:
+    branches: [main]
+
+# Your workflows jobs.
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+      # Check-out your repository.
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      - name: Create env file for api
+        run: |
+          touch ./api/.env
+          echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> ./api/.env
+          echo DB_PASS=${{ secrets.DB_PASS }} >> ./api/.env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> ./api/.env
+          echo DB_DBNAME=${{ secrets.DB_DBNAME }} >> ./api/.env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> ./api/.env
+          echo ADMIN_KEY=${{ secrets.ADMIN_KEY }} >> ./api/.env
+          echo FRONT_HOST=${{secrets.FRONT_HOST}} >> ./api/.env
+          cat ./api/.env
 
-    - name: Login to ECR
-      id: ecr
-      uses: elgohr/ecr-login-action@master
-      with:
-        access_key: ${{ secrets.AWS_ACCESS_KEY }}
-        secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: ${{ secrets.AWS_REGION }}
+      - name: Create env file for front
+        run: |
+          touch ./front/.env
+          echo REACT_APP_PROXY_API=${{ secrets.REACT_APP_PROXY_API }} >> ./front/.env
+          cat ./front/.env
 
-    - name: Publish api to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: api/repository
-        username: ${{ steps.ecr.outputs.username }}
-        password: ${{ steps.ecr.outputs.password }}
-        registry: ${{ steps.ecr.outputs.registry }}
-        dockerfile: api/api.dockerfile
+      - name: "Login to Heroku"
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
 
-    - name: Render Amazon ECS task definition for first container
-      id: render-web-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition-api.json
-        container-name: app
-        image: ${{ steps.ecr.outputs.registry }}
+      - name: "Login to registry"
+        run: "heroku container:login"
 
-    - name: Deploy api to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
-        service: ebooks-service-app
-        cluster: ebooks-cluster
+      - name: Release API.
+        uses: gonuit/heroku-docker-deploy@v1.3.2 # 
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API }}
+          dockerfile_directory: ./api
+          dockerfile_name: Dockerfile
+          docker_options: "--no-cache"
+          process_type: web
 
-    - name: Publish frontend to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: frontend/repository
-        username: ${{ steps.ecr.outputs.username }}
-        password: ${{ steps.ecr.outputs.password }}
-        registry: ${{ steps.ecr.outputs.registry }}
-        dockerfile: front/frontend.dockerfile
+      - name: "Memory fix"
+        run: "heroku config:set NODE_OPTIONS=\"--max_old_space_size=2560\" -a ebooks-front"
 
-    - name: Modify Amazon ECS task definition with second container
-      id: render-app-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition-front.json
-        container-name: web
-        image: ${{ steps.ecr.outputs.registry }}
-
-    - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
-        service: ebooks-service-web
-        cluster: ebooks-cluster
+      - name: Release Front-End.
+        uses: gonuit/heroku-docker-deploy@v1.3.2 # 
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_FRONT }}
+          dockerfile_directory: ./front
+          dockerfile_name: Dockerfile
+          docker_options: "--no-cache"
+          process_type: web
+          
+   
