@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
   try {
     const token = req.headers['authorization'];
     if (token) {
-      let decoded = jwt.verify(token, config.application.JWT_SECRET);
+      let decoded = jwt.verify(token, process.env.JWT_SECRET);
       if (!!decoded) {
         if (mongoose.modelNames().indexOf("User") === -1) {
           mongoose.model("User", userSchema);

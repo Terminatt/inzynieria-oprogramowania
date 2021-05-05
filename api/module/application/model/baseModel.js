@@ -104,7 +104,7 @@ class BaseModel {
         }
     }
 
-    async create(data, returnAll = false) {
+    async create(data) {
         try {
             let documentClass = this.getDocumentClass();
             let model = this.getModel(documentClass);
@@ -158,7 +158,7 @@ class BaseModel {
         }
     }
 
-    async delete(id) {
+    async delete(id, filter = {}) {
         try {
             if (!this.isValidObjectId(id)) {
                 throw new AppError('Nieprawidłowe id dokumentu', 422);
