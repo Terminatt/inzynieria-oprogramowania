@@ -9,13 +9,13 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Copy the app package and package-lock.json file
-COPY front/package*.json ./
+COPY package*.json ./
 
 # Install node packages
 RUN npm install
 
 # Copy or project directory (locally) in the current directory of our docker image (/app)
-COPY front/ .
+COPY . .
 
 # Build the app
 RUN npm run build
