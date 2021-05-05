@@ -1,41 +1,39 @@
-name: Publish Docker
-on: [push]
+# Your workflow name.
+name: Deploy to heroku.
+
+# Run workflow on every push to master branch.
+on:
+  push:
+    branches: [master]
+
+# Your workflows jobs.
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+      # Check-out your repository.
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Login to ECR
-      id: ecr
-      uses: elgohr/ecr-login-action@master
-      with:
-        access_key: ${{ secrets.AWS_ACCESS_KEY }}
-        secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: ${{ secrets.AWS_REGION }}
-
-    - name: Publish api to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: api/repository
-        username: ${{ steps.ecr.outputs.username }}
-        password: ${{ steps.ecr.outputs.password }}
-        registry: ${{ steps.ecr.outputs.registry }}
-        dockerfile: api/api.dockerfile
-
-    - name: Publish frontend to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: frontend/repository
-        username: ${{ steps.ecr.outputs.username }}
-        password: ${{ steps.ecr.outputs.password }}
-        registry: ${{ steps.ecr.outputs.registry }}
-        dockerfile: front/frontend.dockerfile
-
+      - name: Release API.
+        uses: gonuit/heroku-docker-deploy@v1.3.2 # 
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API }}
+          dockerfile_directory: ./api
+          dockerfile_name: api.dockerfile
+          docker_options: "--no-cache"
+          process_type: web
+      - name: Release Front-End.
+        uses: gonuit/heroku-docker-deploy@v1.3.2 # 
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_FRONT }}
+          dockerfile_directory: ./front
+          dockerfile_name: frontend.dockerfile
+          docker_options: "--no-cache"
+          process_type: web
+          
+   
