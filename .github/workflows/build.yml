@@ -44,7 +44,6 @@ jobs:
       - name: "Login to registry"
         run: "heroku container:login"
 
-
       - name: Release API.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
         with:
