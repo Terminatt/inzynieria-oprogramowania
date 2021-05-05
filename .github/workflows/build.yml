@@ -30,21 +30,6 @@ jobs:
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: api/api.dockerfile
 
-    - name: Render Amazon ECS task definition for first container
-      id: render-app-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition-api.json
-        container-name: app
-        image: ${{ steps.ecr.outputs.registry }}
-
-    - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
-        service: ebooks-service-app
-        cluster: ebook-cluster
-
     - name: Publish frontend to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
@@ -54,17 +39,3 @@ jobs:
         registry: ${{ steps.ecr.outputs.registry }}
         dockerfile: front/frontend.dockerfile
 
-    - name: Modify Amazon ECS task definition with second container
-      id: render-web-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition-front.json
-        container-name: web
-        image: ${{ steps.ecr.outputs.registry }}
-
-    - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-        service: ebooks-service-web
-        cluster: ebook-cluster
