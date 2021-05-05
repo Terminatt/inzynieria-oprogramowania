@@ -36,7 +36,7 @@ global.appRoot = path.resolve(__dirname);
 
 //zabezpieczenia: cors, headery, limit requestów
 var corsOptions = {
-    origin: ["http://localhost:3000"],
+    origin: [process.env.FRONT_HOST],
     optionsSuccessStatus: 200
 }
 

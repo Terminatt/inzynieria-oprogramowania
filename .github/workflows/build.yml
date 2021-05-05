@@ -24,6 +24,7 @@ jobs:
           echo DB_DBNAME=${{ secrets.DB_DBNAME }} >> ./api/.env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> ./api/.env
           echo ADMIN_KEY=${{ secrets.ADMIN_KEY }} >> ./api/.env
+          echo FRONT_HOST=${{secrets.FRONT_HOST}} >> ./api/.env
           cat ./api/.env
 
       - name: Create env file for front
