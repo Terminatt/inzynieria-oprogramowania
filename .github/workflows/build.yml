@@ -43,7 +43,7 @@ jobs:
       with:
         task-definition: ${{ steps.render-app-container.outputs.task-definition }}
         service: ebooks-service-app
-        cluster: ebooks-cluster
+        cluster: ebook-cluster
 
     - name: Publish frontend to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
@@ -67,4 +67,4 @@ jobs:
       with:
         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
         service: ebooks-service-web
-        cluster: ebooks-cluster
+        cluster: ebook-cluster
