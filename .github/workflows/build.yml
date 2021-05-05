@@ -15,15 +15,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Make envfile for api
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DEBUG: false
+          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          envkey_DB_PASS: ${{ secrets.DB_PASS }}
+          envkey_DB_HOST: ${{ secrets.DB_HOST }}
+          envkey_DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+          directory: ./api
+          file_name: .env
+      
+      - name: Make envfile for front
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DEBUG: false
+          envkey_REACT_APP_PROXY_API: ${{ secrets.REACT_APP_PROXY_API }}
+          directory: ./front
+          file_name: .env
+
       - name: "Login to Heroku"
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           justlogin: true
-          
+
       - name: "Login to registry"
         run: "heroku container:login"
+
 
       - name: Release API.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
@@ -35,6 +57,9 @@ jobs:
           dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
+
+        - name: "Memory fix"
+          run: heroku config:set NODE_OPTIONS="--max_old_space_size=2560" -a ${{ secrets.HEROKU_APP_NAME_FRONT }}
 
       - name: Release Front-End.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
