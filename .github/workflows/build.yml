@@ -15,6 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: "Login to Heroku"
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+
       - name: Release API.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
         with:
@@ -25,6 +32,7 @@ jobs:
           dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
+
       - name: Release Front-End.
         uses: gonuit/heroku-docker-deploy@v1.3.2 # 
         with:
