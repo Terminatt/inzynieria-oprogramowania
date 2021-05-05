@@ -22,7 +22,7 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API }}
           dockerfile_directory: ./api
-          dockerfile_name: api.dockerfile
+          dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
       - name: Release Front-End.
@@ -32,7 +32,7 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME_FRONT }}
           dockerfile_directory: ./front
-          dockerfile_name: frontend.dockerfile
+          dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
           
