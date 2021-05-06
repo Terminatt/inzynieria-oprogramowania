@@ -1,3 +1,5 @@
 export interface BaseEntity {
-  _id: string | number;
+  _id: Id;
 }
+
+export type Id = string | number; 

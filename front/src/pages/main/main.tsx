@@ -1,5 +1,7 @@
 // core
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Dashboard from './dashboard/dashboard';
 
 // css
 import "./main.less";
@@ -8,9 +10,11 @@ import "./main.less";
 
 function Main() {
   return (
-    <div>
-      Pomyślnie zalogowano
-    </div>
+    <Switch>
+      <Route path="/">
+        <Dashboard />
+      </Route>
+    </Switch>
   );
 }
 

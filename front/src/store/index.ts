@@ -6,10 +6,12 @@ import thunk from 'redux-thunk';
 // reducers
 import userReducer from './user/reducers';
 import modalsReducer from "./modals/reducers";
+import categoryReducer from './category/reducers';
 
 const rootReducer = combineReducers({
   user: userReducer,
   modals: modalsReducer,
+  categories: categoryReducer,
 })
 
 
