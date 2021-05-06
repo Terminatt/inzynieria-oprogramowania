@@ -85,6 +85,7 @@ function Credentials() {
     <Modal
       afterClose={onReset}
       maskClosable={true}
+      destroyOnClose
       onCancel={onClose}
       title={isLogin ? "Zaloguj się" : "Zarejestruj się"}
       okText="Zamknij"
