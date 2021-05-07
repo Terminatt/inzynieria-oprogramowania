@@ -1,5 +1,6 @@
 import { Id } from "../base/BaseEntity";
 import { ErrorResponse } from "../base/BaseErrorResponse";
+import { Category } from "../category/types";
 
 export interface EbooksState {
   collection: Ebook[];
@@ -18,15 +19,16 @@ export interface Ebook {
   numberOfPages: number;
   coverImage?: string;
   file?: string;
-  categories: Id[];
+  categories: Partial<Category>[];
 
 }
 
-export type EbookPayloadKeys = "title" | "author" | "publisher" | "releaseDate" | "numberOfPages" | "categories";
+export type EbookPayloadKeys = "title" | "author" | "publisher" | "releaseDate" | "numberOfPages";
 
 export interface EbookPayload extends Record<EbookPayloadKeys, Ebook> {
   coverImage?: File;
   file: File;
 
+  categories: Id[];
 }
 

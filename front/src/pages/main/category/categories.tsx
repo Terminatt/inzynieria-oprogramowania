@@ -26,6 +26,7 @@ function Categories() {
   const categories = useSelector((state: AppState) => state.categories);
 
   const onClickAdd = () => {
+    dispatch(selectCategory(null));
     dispatch(openModal(ModalType.ADD_CATEGORY));
   }
 

@@ -9,5 +9,7 @@ export enum ModalType {
   LOGIN = "LOGIN",
   EDIT_CATEGORY = "EDIT_CATEGORY",
   ADD_CATEGORY = "ADD_CATEGORY",
+  ADD_EBOOK = "ADD_EBOOK",
+  EDIT_EBOOK = "EDIT_EBOOK",
 
 }

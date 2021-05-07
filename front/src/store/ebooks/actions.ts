@@ -158,6 +158,13 @@ export const deleteEbook = (id: Id, cb?: () => void) => {
 }
 
 
+export const selectEbook = (data: Ebook | null) => {
+  return {
+    type: CONS.SELECT_EBOOK,
+    data,
+  } as const
+}
+
 export type EbookActions = ReturnType<typeof handleEbookStarted | typeof handleEbookFinished | typeof handleEbookError | 
-typeof getEbookCollectionFinished | typeof getEbookFinished | typeof addEbookFinished | typeof editEbookFinished
+typeof getEbookCollectionFinished | typeof getEbookFinished | typeof addEbookFinished | typeof editEbookFinished | typeof selectEbook
 >;

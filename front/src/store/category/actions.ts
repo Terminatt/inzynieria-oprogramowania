@@ -151,7 +151,7 @@ export const deleteCategory = (id: Id, cb?: () => void) => {
   };
 }
 
-export const selectCategory = (data: Category) => {
+export const selectCategory = (data: Category | null) => {
   return {
     type: CONS.SELECT_CATEGORY,
     data,

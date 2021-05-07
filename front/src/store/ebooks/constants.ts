@@ -8,3 +8,5 @@ export const GET_EBOOKS = "GET_EBOOKS";
 export const GET_EBOOK = "GET_EBOOK";
 export const ADD_EBOOK = "ADD_EBOOK";
 export const EDIT_EBOOK = "EDIT_EBOOK";
+
+export const SELECT_EBOOK = "SELECT_EBOOK";

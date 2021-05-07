@@ -45,7 +45,7 @@ function CategoriesCard(props: ComponentProps) {
   }
 
   return (
-    <Card className={["category-card", addCard ? "category-add" : "", props.className ? props.className : ""].join(" ")}
+    <Card className={["card", addCard ? "add" : "", props.className ? props.className : ""].join(" ")}
       onClick={onClick}
       actions={addCard ? [] : [
         <EditOutlined onClick={onEditClick} key="edit" />,
