@@ -1,0 +1,21 @@
+@import "../../styles/colors.less";
+@import "../../styles/mixins.less";
+
+.loading-bg,
+.loading {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.loading-bg {
+  background-color: @loading;
+  opacity: 0.3;
+  z-index: 200;
+}
+
+.loading {
+  z-index: 300;
+  font-size: 100px;
+  .center();
+}

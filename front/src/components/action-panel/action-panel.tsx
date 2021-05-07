@@ -2,7 +2,7 @@
 import React from 'react';
 
 //antd
-import { Col, Row } from 'antd';
+import { Row } from 'antd';
 
 // css
 import "./action-panel.less";
