@@ -60,6 +60,7 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
 
       Utils.setToken(results.data.token);
       Utils.setAxiosHeaders(results.data.token, axios);
+      dispatch(addToken(results.data.token))
 
       if (cb) {
         cb();
@@ -84,6 +85,7 @@ export const isAuth = (token: string, cb?: () => void) => {
 
       Utils.setToken(results.data.token);
       Utils.setAxiosHeaders(results.data.token, axios);
+      dispatch(addToken(results.data.token))
 
       if (cb) {
         cb();
@@ -102,6 +104,15 @@ const loginUserFinished = (data: any) => {
   } as const
 }
 
+const addToken = (token: string) => {
+  return {
+    type: CONS.ADD_TOKEN,
+    token,
+  } as const
+}
 
 
-export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished>
+
+export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished
+| typeof addToken
+>

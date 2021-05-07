@@ -6,6 +6,7 @@ export interface UserState {
   user?: User
   isLoading: boolean;
   error?: ErrorResponse | null;
+  token: string | null;
 }
 
 export interface User extends BaseEntity {

@@ -6,6 +6,7 @@ import * as CONS from "./constants";
 const initialState: UserState = {
   isLoading: false,
   error: null,
+  token: null,
 }
 
 
@@ -31,6 +32,11 @@ export default function userReducer(state = initialState, action: UserActions): 
       return {
         ...state,
         user: action.data,
+      }
+    case CONS.ADD_TOKEN:
+      return {
+        ...state,
+        token: action.token,
       }
     default:
       return state

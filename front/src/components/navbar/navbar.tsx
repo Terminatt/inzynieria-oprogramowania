@@ -1,6 +1,6 @@
 // core
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // redux
 import { ModalType } from '../../store/modals/types';
@@ -16,12 +16,13 @@ import { ResponsiveBreakpoint } from '../../utils/utils-types';
 
 // css
 import './navbar.less';
+import { AppState } from '../../store';
 
 function Navbar() {
   const bp = Utils.getResponsiveBreakpoint();
   const size = bp === ResponsiveBreakpoint.XS ? "small" : "middle";
 
-  const token = Utils.getToken();
+  const token = useSelector((state: AppState) => state.user.token);
   const dispatch = useDispatch();
 
   const onButtonClick = (type: ModalType) => {
