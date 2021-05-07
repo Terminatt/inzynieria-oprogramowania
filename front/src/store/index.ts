@@ -7,11 +7,13 @@ import thunk from 'redux-thunk';
 import userReducer from './user/reducers';
 import modalsReducer from "./modals/reducers";
 import categoryReducer from './category/reducers';
+import ebookskReducer from './ebooks/reducers';
 
 const rootReducer = combineReducers({
   user: userReducer,
   modals: modalsReducer,
   categories: categoryReducer,
+  ebooks: ebookskReducer,
 })
 
 
