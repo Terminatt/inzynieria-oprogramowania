@@ -54,7 +54,7 @@ function CategoriesCard(props: ComponentProps) {
       }
     >
       {addCard ? (
-        <div className="category-card__add">
+        <div className="card__add">
           <PlusCircleOutlined />
         </div>
       ) : (
