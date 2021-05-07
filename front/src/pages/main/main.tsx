@@ -1,20 +1,31 @@
 // core
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+
+// custom
 import Dashboard from './dashboard/dashboard';
+import Sidebar from './sidebar/sidebar';
 
 // css
 import "./main.less";
+import { Col, Row } from 'antd';
 
 // components
 
 function Main() {
   return (
-    <Switch>
-      <Route path="/">
-        <Dashboard />
-      </Route>
-    </Switch>
+    <Row className="main">
+      <Col className="main__sidebar">
+        <Sidebar />
+      </Col>
+      <Col className="main__content">
+        <Switch>
+          <Route path="/">
+            <Dashboard />
+          </Route>
+        </Switch>
+      </Col>
+    </Row>
   );
 }
 
