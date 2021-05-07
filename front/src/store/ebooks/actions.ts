@@ -1,0 +1,163 @@
+import { Dispatch } from "react";
+import axios from "../../axios/axios";
+import { Id } from "../base/BaseEntity";
+import { ErrorResponse } from "../base/BaseErrorResponse";
+import BaseResponse from "../base/BaseResponse";
+import * as CONS from "./constants";
+import { Ebook, EbookPayload } from "./types";
+
+// handle loading
+const handleEbookStarted = () => {
+  return {
+    type: CONS.HANDLE_EBOOK_STARTED,
+  } as const
+}
+
+const handleEbookFinished = () => {
+  return {
+    type: CONS.HANDLE_EBOOK_FINISHED,
+  } as const
+}
+
+export const handleEbookError = (error?: ErrorResponse | null) => {
+  return {
+    type: CONS.HANDLE_EBOOK_ERROR,
+    error,
+  } as const
+}
+
+
+export const getEbooksCollection = (cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      const results = await axios.get<BaseResponse<Ebook[]>>("/ebook/ebook");
+
+      if(results.data.document) {
+          dispatch(getEbookCollectionFinished(results.data.document))
+      }
+
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
+
+export const getEbookCollectionFinished = (data: Ebook[]) => {
+  return {
+    type: CONS.GET_EBOOKS,
+    data,
+  } as const
+}
+
+
+export const getEbook = (id: Id, cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      const results = await axios.get<BaseResponse<Ebook>>(`/ebook/ebook/${id}`);
+
+      if(results.data.document) {
+          dispatch(getEbookFinished(results.data.document))
+      }
+
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
+
+export const getEbookFinished = (data: Ebook) => {
+  return {
+    type: CONS.GET_EBOOK,
+    data,
+  } as const
+}
+
+
+export const addEbook = (payload: EbookPayload, cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      const results = await axios.post<BaseResponse<Ebook>>("/ebook/ebook/", payload);
+
+      if(results.data.document) {
+          dispatch(addEbookFinished(results.data.document))
+      }
+
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
+
+export const addEbookFinished = (data: Ebook) => {
+  return {
+    type: CONS.ADD_EBOOK,
+    data,
+  } as const
+}
+
+export const editEbook = (id: Id, payload: EbookPayload, cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      const results = await axios.put<BaseResponse<Ebook>>(`/ebook/ebook/${id}`, payload);
+
+      if(results.data.document) {
+          dispatch(editEbookFinished(results.data.document))
+      }
+
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
+
+export const editEbookFinished = (data: Ebook) => {
+  return {
+    type: CONS.EDIT_EBOOK,
+    data,
+  } as const
+}
+
+export const deleteEbook = (id: Id, cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      await axios.delete<BaseResponse<Ebook>>(`/ebook/ebook/${id}`);
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
+
+
+export type EbookActions = ReturnType<typeof handleEbookStarted | typeof handleEbookFinished | typeof handleEbookError | 
+typeof getEbookCollectionFinished | typeof getEbookFinished | typeof addEbookFinished | typeof editEbookFinished
+>;

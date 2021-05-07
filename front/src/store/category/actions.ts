@@ -114,7 +114,7 @@ export const editCategory = (id: Id, payload: CategoryPayload, cb?: () => void) 
     try {
       const results = await axios.put<BaseResponse<Category>>(`/ebook/category/${id}`, payload);
       if(results.data.document) {
-        dispatch(editCategoryFinished(results));
+        dispatch(editCategoryFinished(results.data.document));
 
       }
       dispatch(handleCategoryFinished());
@@ -139,7 +139,7 @@ export const deleteCategory = (id: Id, cb?: () => void) => {
   return async (dispatch: Dispatch<CategoryActions>) => {
     dispatch(handleCategoryStarted());
     try {
-      await axios.post<BaseResponse>(`/ebook/category/${id}`);
+      await axios.delete<BaseResponse>(`/ebook/category/${id}`);
       dispatch(handleCategoryFinished());
       if(cb) {
         cb();
