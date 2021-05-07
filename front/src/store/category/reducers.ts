@@ -37,6 +37,7 @@ export default function categoryReducer(state = initialState, action: CategoryAc
     case CONS.GET_CATEGORY:
     case CONS.EDIT_CATEGORY:
     case CONS.ADD_CATEGORY:
+    case CONS.SELECT_CATEGORY:
       return {
         ...state,
         selected: action.data,

@@ -32,8 +32,8 @@ export const getCategoryCollection = (cb?: () => void) => {
     try {
       const results = await axios.get<BaseResponse<Category[]>>("/ebook/category");
 
-      if(results.data.document) {
-          dispatch(getCategoryCollectionFinished(results.data.document))
+      if(results.data.documents) {
+          dispatch(getCategoryCollectionFinished(results.data.documents))
       }
 
       dispatch(handleCategoryFinished());
@@ -59,8 +59,8 @@ export const getCategory= (id: Id, cb?: () => void) => {
     dispatch(handleCategoryStarted());
     try {
       const results = await axios.get<BaseResponse<Category>>(`/ebook/category/${id}`);
-      if(results.data.document) {
-        dispatch(getCategoryFinished(results.data.document))
+      if(results.data.documents) {
+        dispatch(getCategoryFinished(results.data.documents))
 
       }
       dispatch(handleCategoryFinished());
@@ -86,8 +86,8 @@ export const addCategory = (payload: CategoryPayload, cb?: () => void) => {
     dispatch(handleCategoryStarted());
     try {
       const results = await axios.post<BaseResponse<Category>>("/ebook/category", payload);
-      if(results.data.document) {
-        dispatch(addCategoryFinished(results.data.document));
+      if(results.data.documents) {
+        dispatch(addCategoryFinished(results.data.documents));
 
       }
       dispatch(handleCategoryFinished());
@@ -113,8 +113,8 @@ export const editCategory = (id: Id, payload: CategoryPayload, cb?: () => void) 
     dispatch(handleCategoryStarted());
     try {
       const results = await axios.put<BaseResponse<Category>>(`/ebook/category/${id}`, payload);
-      if(results.data.document) {
-        dispatch(editCategoryFinished(results.data.document));
+      if(results.data.documents) {
+        dispatch(editCategoryFinished(results.data.documents));
 
       }
       dispatch(handleCategoryFinished());
@@ -151,7 +151,14 @@ export const deleteCategory = (id: Id, cb?: () => void) => {
   };
 }
 
+export const selectCategory = (data: Category) => {
+  return {
+    type: CONS.SELECT_CATEGORY,
+    data,
+  } as const
+}
+
 
 export type CategoryActions = ReturnType<typeof handleCategoryStarted | typeof handleCategoryFinished | typeof handleCategoryError |
-  typeof getCategoryCollectionFinished | typeof getCategoryFinished | typeof addCategoryFinished | typeof editCategoryFinished
+  typeof getCategoryCollectionFinished | typeof getCategoryFinished | typeof addCategoryFinished | typeof editCategoryFinished | typeof selectCategory
 >;

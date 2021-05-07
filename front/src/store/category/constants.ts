@@ -8,3 +8,5 @@ export const GET_CATEGORIES = "GET_CATEGORIES";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const EDIT_CATEGORY = "EDIT_CATEGORY";
+
+export const SELECT_CATEGORY = "SELECT_CATEGORY";

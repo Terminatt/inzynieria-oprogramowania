@@ -41,8 +41,9 @@ interface FormValues {
 
 function Credentials() {
   const modalsState = useSelector((state: AppState) => state.modals);
-  const { isOpen } = modalsState;
+  let { isOpen } = modalsState;
   const isLogin = modalsState.type === ModalType.LOGIN;
+  isOpen = isOpen && (modalsState.type === ModalType.LOGIN || modalsState.type === ModalType.REGISTER);
   const [form] = Form.useForm();
   const history = useHistory();
 

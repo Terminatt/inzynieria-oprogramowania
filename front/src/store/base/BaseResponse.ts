@@ -1,4 +1,4 @@
 export default interface BaseResponse<Data = {}> {
-  document?: Data;
+  documents?: Data;
   success: boolean;
 }

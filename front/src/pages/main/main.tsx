@@ -9,6 +9,7 @@ import Sidebar from './sidebar/sidebar';
 // css
 import "./main.less";
 import { Col, Row } from 'antd';
+import Categories from './category/categories';
 
 // components
 
@@ -20,6 +21,9 @@ function Main() {
       </Col>
       <Col className="main__content">
         <Switch>
+          <Route path="/main/category">
+            <Categories />
+          </Route>
           <Route path="/">
             <Dashboard />
           </Route>

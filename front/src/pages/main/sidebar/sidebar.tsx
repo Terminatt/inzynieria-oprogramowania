@@ -29,12 +29,12 @@ function Sidebar() {
           </Menu.Item>
           <Menu.Item icon={<PaperClipOutlined />}>
             <Link to="/main/category">
-              Dodaj kategorię
+              Kategorie
         </Link>
           </Menu.Item>
           <Menu.Item icon={<BookOutlined />}>
             <Link to="/main/ebook">
-              Dodaj Ebooka
+              Ebooki
         </Link>
           </Menu.Item>
         </Menu>

@@ -55,7 +55,7 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
     dispatch(handleStarted())
     try {
       const results = await axios.post<LoginResponse>("/login", payload);
-      dispatch(loginUserFinished(results.data.document))
+      dispatch(loginUserFinished(results.data.documents))
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);
@@ -79,7 +79,7 @@ export const isAuth = (token: string, cb?: () => void) => {
     dispatch(handleStarted())
     try {
       const results = await axios.get<LoginResponse>("/isAuth");
-      dispatch(loginUserFinished(results.data.document))
+      dispatch(loginUserFinished(results.data.documents))
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);

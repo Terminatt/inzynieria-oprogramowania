@@ -33,8 +33,8 @@ export const getEbooksCollection = (cb?: () => void) => {
     try {
       const results = await axios.get<BaseResponse<Ebook[]>>("/ebook/ebook");
 
-      if(results.data.document) {
-          dispatch(getEbookCollectionFinished(results.data.document))
+      if(results.data.documents) {
+          dispatch(getEbookCollectionFinished(results.data.documents))
       }
 
       dispatch(handleEbookFinished());
@@ -62,8 +62,8 @@ export const getEbook = (id: Id, cb?: () => void) => {
     try {
       const results = await axios.get<BaseResponse<Ebook>>(`/ebook/ebook/${id}`);
 
-      if(results.data.document) {
-          dispatch(getEbookFinished(results.data.document))
+      if(results.data.documents) {
+          dispatch(getEbookFinished(results.data.documents))
       }
 
       dispatch(handleEbookFinished());
@@ -91,8 +91,8 @@ export const addEbook = (payload: EbookPayload, cb?: () => void) => {
     try {
       const results = await axios.post<BaseResponse<Ebook>>("/ebook/ebook/", payload);
 
-      if(results.data.document) {
-          dispatch(addEbookFinished(results.data.document))
+      if(results.data.documents) {
+          dispatch(addEbookFinished(results.data.documents))
       }
 
       dispatch(handleEbookFinished());
@@ -119,8 +119,8 @@ export const editEbook = (id: Id, payload: EbookPayload, cb?: () => void) => {
     try {
       const results = await axios.put<BaseResponse<Ebook>>(`/ebook/ebook/${id}`, payload);
 
-      if(results.data.document) {
-          dispatch(editEbookFinished(results.data.document))
+      if(results.data.documents) {
+          dispatch(editEbookFinished(results.data.documents))
       }
 
       dispatch(handleEbookFinished());
