@@ -10,7 +10,7 @@ import { AppState } from '../../../store';
 import { Category } from '../../../store/category/types';
 
 // antd
-import { Row } from 'antd';
+import { Col, Row } from 'antd';
 
 // custom
 import CategoriesCard from './categories-card/categories-card';
@@ -56,12 +56,16 @@ function Categories() {
     <Row>
       <Loading isLoading={isLoading} />
       <Row className="categories">
-        <div className="categories__cards">
-          <CategoriesCard onClick={onClickAdd} className="categories__card" addCard />
+        <Row className="categories__cards">
+          <Col className="item-card" xs={8}>
+            <CategoriesCard onClick={onClickAdd} addCard />
+          </Col>
           {collection.map((el) => (
-            <CategoriesCard onDelete={onDelete} key={el._id} onEditClick={onEditClick} data={el} className="categories__card" />
+            <Col key={el._id} className="item-card" xs={8}>
+              <CategoriesCard onDelete={onDelete} onEditClick={onEditClick} data={el} />
+            </Col>
           ))}
-        </div>
+        </Row>
         <CategoriesModal />
       </Row>
     </Row>

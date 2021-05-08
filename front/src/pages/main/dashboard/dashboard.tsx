@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // antd
-import { Row } from 'antd';
+import { Col, Row } from 'antd';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -90,7 +90,9 @@ function Dashboard() {
 
   const renderEbooks = (ebooks: Ebook[]) => {
     return ebooks.map((el) => (
-      <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
+      <Col className="item-card" xs={6}>
+        <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
+      </Col>
     ))
   }
 

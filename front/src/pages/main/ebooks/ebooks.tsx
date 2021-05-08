@@ -11,7 +11,7 @@ import { AppState } from '../../../store';
 
 
 // antd
-import { Row } from 'antd';
+import { Col, Row } from 'antd';
 
 // custom
 import EbookCard from './ebooks-card/ebooks-card';
@@ -57,12 +57,16 @@ function Ebooks() {
     <Row>
       <Loading isLoading={isLoading} />
       <Row className="ebooks">
-        <div className="ebooks__cards">
-          <EbookCard onClick={onClick} addCard />
+        <Row className="ebooks__cards">
+          <Col className="item-card" xs={6}>
+            <EbookCard onClick={onClick} addCard />
+          </Col>
           {collection.map((el) => (
-            <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="ebooks__card" data={el} />
+            <Col key={el._id} className="item-card" xs={6}>
+              <EbookCard onDelete={onDelete} onEditClick={onEditClick} data={el} />
+            </Col>
           ))}
-        </div>
+        </Row>
         <EbooksModal />
       </Row>
 
