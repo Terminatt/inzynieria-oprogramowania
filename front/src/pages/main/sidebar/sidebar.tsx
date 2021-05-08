@@ -4,7 +4,7 @@ import Sider from 'antd/lib/layout/Sider';
 
 // antd
 import { Menu, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HomeOutlined, BookOutlined, PaperClipOutlined } from '@ant-design/icons';
 
 
@@ -17,22 +17,24 @@ import { AppState } from '../../../store';
 function Sidebar() {
 
   const user = useSelector((state: AppState) => state.user.user);
+  const { pathname } = useLocation();
+
 
   return (
     <Sider className="sidebar">
       <Row>
-        <Menu className="sidebar__menu" theme="dark">
-          <Menu.Item icon={<HomeOutlined />}>
+        <Menu selectedKeys={[pathname]} className="sidebar__menu" theme="dark">
+          <Menu.Item key="/main" icon={<HomeOutlined />}>
             <Link to="/main">
               Dashboard
         </Link>
           </Menu.Item>
-          <Menu.Item icon={<PaperClipOutlined />}>
+          <Menu.Item key="/main/category" icon={<PaperClipOutlined />}>
             <Link to="/main/category">
               Kategorie
         </Link>
           </Menu.Item>
-          <Menu.Item icon={<BookOutlined />}>
+          <Menu.Item key="/main/ebook" icon={<BookOutlined />}>
             <Link to="/main/ebook">
               Ebooki
         </Link>
