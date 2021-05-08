@@ -18,12 +18,15 @@ import CategoriesModal from '../../../components/modals/categories-modal/categor
 
 // css
 import "./categories.less";
+import Loading from '../../../components/loading/loading';
 
 // components
 
 function Categories() {
   const dispatch = useDispatch();
   const categories = useSelector((state: AppState) => state.categories);
+
+  const { collection, isLoading } = categories;
 
   const onClickAdd = () => {
     dispatch(selectCategory(null));
@@ -50,14 +53,17 @@ function Categories() {
   }, [dispatch])
 
   return (
-    <Row className="categories">
-      <div className="categories__cards">
-        <CategoriesCard onClick={onClickAdd} className="categories__card" addCard />
-        {categories.collection.map((el) => (
-          <CategoriesCard onDelete={onDelete} key={el._id} onEditClick={onEditClick} data={el} className="categories__card" />
-        ))}
-      </div>
-      <CategoriesModal />
+    <Row>
+      <Loading isLoading={isLoading} />
+      <Row className="categories">
+        <div className="categories__cards">
+          <CategoriesCard onClick={onClickAdd} className="categories__card" addCard />
+          {collection.map((el) => (
+            <CategoriesCard onDelete={onDelete} key={el._id} onEditClick={onEditClick} data={el} className="categories__card" />
+          ))}
+        </div>
+        <CategoriesModal />
+      </Row>
     </Row>
   );
 }

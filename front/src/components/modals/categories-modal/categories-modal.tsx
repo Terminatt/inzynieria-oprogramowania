@@ -56,7 +56,7 @@ function CategoriesModal() {
   const onFinish = (values: FormValues) => {
     if (isAdd) {
       dispatch(addCategory(values, () => {
-        closeModal();
+        onClose();
         dispatch(getCategoryCollection());
       }));
     } else {

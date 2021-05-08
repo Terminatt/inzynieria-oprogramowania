@@ -20,12 +20,14 @@ import EbooksModal from '../../../components/modals/ebook-modal/ebook-modal';
 // css
 import "./ebooks.less";
 import { Ebook } from '../../../store/ebooks/types';
+import Loading from '../../../components/loading/loading';
 
 
 function Ebooks() {
   const dispatch = useDispatch();
 
-  const ebooks = useSelector((state: AppState) => state.ebooks.collection);
+  const ebooks = useSelector((state: AppState) => state.ebooks);
+  const { collection, isLoading } = ebooks;
 
   useEffect(() => {
     dispatch(getCategoryCollection());
@@ -52,14 +54,18 @@ function Ebooks() {
     }
   }
   return (
-    <Row className="ebooks">
-      <div className="ebooks__cards">
-        <EbookCard onClick={onClick} addCard />
-        {ebooks.map((el) => (
-          <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="ebooks__card" data={el} />
-        ))}
-      </div>
-      <EbooksModal />
+    <Row>
+      <Loading isLoading={isLoading} />
+      <Row className="ebooks">
+        <div className="ebooks__cards">
+          <EbookCard onClick={onClick} addCard />
+          {collection.map((el) => (
+            <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="ebooks__card" data={el} />
+          ))}
+        </div>
+        <EbooksModal />
+      </Row>
+
     </Row>
   );
 }
