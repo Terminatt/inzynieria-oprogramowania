@@ -7,18 +7,11 @@ import { Menu, Row } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { HomeOutlined, BookOutlined, PaperClipOutlined } from '@ant-design/icons';
 
-
 // css
 import "./sidebar.less";
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../store';
-// components
 
 function Sidebar() {
-
-  const user = useSelector((state: AppState) => state.user.user);
   const { pathname } = useLocation();
-
 
   return (
     <Sider className="sidebar">

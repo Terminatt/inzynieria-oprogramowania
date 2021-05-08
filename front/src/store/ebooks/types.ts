@@ -19,13 +19,13 @@ export interface Ebook {
   numberOfPages: number;
   coverImage?: string;
   file?: string;
-  categories: Partial<Category>[];
+  categories: Pick<Category, "_id" | "name">[];
 
 }
 
 export type EbookPayloadKeys = "title" | "author" | "publisher" | "releaseDate" | "numberOfPages";
 
-export interface EbookPayload extends Record<EbookPayloadKeys, Ebook> {
+export interface EbookPayload extends Pick<Ebook, EbookPayloadKeys> {
   coverImage?: File;
   file: File;
 

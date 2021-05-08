@@ -72,8 +72,6 @@ function EbooksModal() {
     }
   }
 
-  console.log(selected?.releaseDate);
-
   return (
 
     <Modal
