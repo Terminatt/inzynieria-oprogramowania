@@ -1,17 +1,13 @@
-# Your workflow name.
 name: Deploy to heroku.
 
-# Run workflow on every push to master branch.
 on:
   push:
     branches: [main]
 
-# Your workflows jobs.
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Check-out your repository.
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -26,16 +22,14 @@ jobs:
           echo ADMIN_KEY=${{ secrets.ADMIN_KEY }} >> ./api/.env
           echo FRONT_HOST=${{secrets.FRONT_HOST}} >> ./api/.env
           echo API_HOST=${{secrets.API_HOST}} >> ./api/.env
-          cat ./api/.env
 
       - name: Create env file for front
         run: |
           touch ./front/.env
           echo REACT_APP_PROXY_API=${{ secrets.REACT_APP_PROXY_API }} >> ./front/.env
-          cat ./front/.env
 
       - name: "Login to Heroku"
-        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
