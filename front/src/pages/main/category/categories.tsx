@@ -57,11 +57,11 @@ function Categories() {
       <Loading isLoading={isLoading} />
       <Row className="categories">
         <Row className="categories__cards">
-          <Col className="item-card" xs={8}>
+          <Col className="item-card" xs={6}>
             <CategoriesCard onClick={onClickAdd} addCard />
           </Col>
           {collection.map((el) => (
-            <Col key={el._id} className="item-card" xs={8}>
+            <Col key={el._id} className="item-card" xs={6}>
               <CategoriesCard onDelete={onDelete} onEditClick={onEditClick} data={el} />
             </Col>
           ))}
