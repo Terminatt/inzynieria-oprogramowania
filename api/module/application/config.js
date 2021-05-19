@@ -51,6 +51,11 @@ Router.delete("/roles", requireAuth, (req, res, next) => {
     Controller.delete(req, res, next);
 })
 
+Router.get("/permissions/types", requireAuth, (req, res, next) => {
+    const Controller = new AclController();
+    Controller.getPermissionTypes(req, res, next);
+})
+
 Router.get("/permissions/:roleId", requireAuth, (req, res, next) => {
     const Controller = new AclController();
     Controller.getList(req, res, next);

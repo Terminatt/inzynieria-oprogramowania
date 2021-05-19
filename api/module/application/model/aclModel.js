@@ -12,20 +12,25 @@ class AclModel extends BaseModel {
         let documentClass = this.getDocumentClass();
         let model = this.getModel(documentClass);
         let document = new model();
-
         document = this.setAllData(data, document);
         let errors = this.validateDocument(document);
         if (errors) {
-            throw errors;
+          throw errors;
         }
         let result = await model.findOneAndUpdate({
           entityName: document.entityName,
           role: document.role,
-        }, document, {
+        }, {
+          entityName: document.entityName,
+          permissions: document.permissions,
+          role: document.role,
+        }, {
+          useFindAndModify: false,
           upsert: true,
+          new: true,
         });
-        if (result instanceof Array) {
-            return result[0];
+        if (result) {
+            return result;
         } else {
             throw new AppError("Wystąpił błąd przy zapisie dokumentu", 422);
         }
@@ -43,15 +48,15 @@ class AclModel extends BaseModel {
         this.setAllowedData(data, document);
 
         if ('entityName' in data) {
-          document.entityName = document.entityName;
+          document.entityName = data.entityName;
         }
 
         if ('permissions' in data) {
-          document.permissions = document.permissions;
+          document.permissions = data.permissions;
         }
 
         if('role' in data) {
-          document.role = document.role;
+          document.role = data.role;
         }
 
         return document;

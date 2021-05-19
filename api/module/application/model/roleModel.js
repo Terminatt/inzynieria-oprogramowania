@@ -9,9 +9,8 @@ class RoleModel extends BaseModel {
   async setAllData(data, document) {
     try {
         this.setAllowedData(data, document);
-
         if ('name' in data) {
-            document.name = await this.setTitle(document, data.name);
+            document = await this.setTitle(document, data.name);
         }
         document.superAdmin = true;
         document.deletable = true;
