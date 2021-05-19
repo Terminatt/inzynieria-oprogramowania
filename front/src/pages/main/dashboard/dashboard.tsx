@@ -97,7 +97,7 @@ function Dashboard() {
   }
 
   return (
-    <Row>
+    <Row className="scroll-container">
       <Loading isLoading={isLoading || parsingLoading} />
       <Row className="dashboard">
         {renderDashboard()}

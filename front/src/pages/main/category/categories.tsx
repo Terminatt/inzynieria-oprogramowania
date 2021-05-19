@@ -53,7 +53,7 @@ function Categories() {
   }, [dispatch])
 
   return (
-    <Row>
+    <Row className="scroll-container">
       <Loading isLoading={isLoading} />
       <Row className="categories">
         <Row className="categories__cards">

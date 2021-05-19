@@ -54,7 +54,7 @@ function Ebooks() {
     }
   }
   return (
-    <Row>
+    <Row className="scroll-container">
       <Loading isLoading={isLoading} />
       <Row className="ebooks">
         <Row className="ebooks__cards">
