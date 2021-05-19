@@ -26,42 +26,42 @@ Router.get("/isAuth", (req, res, next) => {
     Controller.isAuth(req, res, next);
 });
 
-Router.get("/roles", requireAuth, (req, res, next) => {
+Router.get("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "DISPLAY"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.getList(req, res, next);
 })
 
-Router.get("/roles/:id", requireAuth, (req, res, next) => {
+Router.get("/roles/:id", (req, res, next) => requireAuth(req, res, next, "Role", "DISPLAY"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.get(req, res, next);
 })
 
-Router.post("/roles", requireAuth, (req, res, next) => {
+Router.post("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "CREATE"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.create(req, res, next);
 })
 
-Router.put("/roles", requireAuth, (req, res, next) => {
+Router.put("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "EDIT"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.update(req, res, next);
 })
 
-Router.delete("/roles", requireAuth, (req, res, next) => {
+Router.delete("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "DELETE"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.delete(req, res, next);
 })
 
-Router.get("/permissions/types", requireAuth, (req, res, next) => {
+Router.get("/permissions/types", (req, res, next) => requireAuth(req, res, next, "Role", "DISPLAY"), (req, res, next) => {
     const Controller = new AclController();
     Controller.getPermissionTypes(req, res, next);
 })
 
-Router.get("/permissions/:roleId", requireAuth, (req, res, next) => {
+Router.get("/permissions/:roleId", (req, res, next) => requireAuth(req, res, next, "Role", "DISPLAY"), (req, res, next) => {
     const Controller = new AclController();
     Controller.getList(req, res, next);
 })
 
-Router.post("/permissions", requireAuth, (req, res, next) => {
+Router.post("/permissions", (req, res, next) => requireAuth(req, res, next, "Role", "CREATE"), (req, res, next) => {
     const Controller = new AclController();
     Controller.createOrUpdate(req, res, next);
 })

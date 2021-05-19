@@ -9,54 +9,54 @@ const CategoryController = require("./controller/categoryController");
 
 //Kategorie
 
-Router.get("/category", requireAuth, (req, res, next) => {
+Router.get("/category", (req, res, next) => requireAuth(req, res, next, "Category", "DISPLAY"), (req, res, next) => {
     const Controller = new CategoryController(req);
     Controller.getList(req, res, next);
 });
 
-Router.get("/category/:id", requireAuth, (req, res, next) => {
+Router.get("/category/:id", (req, res, next) => requireAuth(req, res, next, "Category", "DISPLAY"), (req, res, next) => {
     const Controller = new CategoryController(req);
     Controller.get(req, res, next);
 });
 
-Router.put("/category/:id", requireAuth, (req, res, next) => {
+Router.put("/category/:id", (req, res, next) => requireAuth(req, res, next, "Category", "EDIT"), (req, res, next) => {
     const Controller = new CategoryController(req);
     Controller.update(req, res, next);
 });
 
-Router.delete("/category/:id", requireAuth, (req, res, next) => {
+Router.delete("/category/:id", (req, res, next) => requireAuth(req, res, next, "Category", "DELETE"), (req, res, next) => {
     const Controller = new CategoryController(req);
     Controller.delete(req, res, next);
 });
 
-Router.post("/category", requireAuth, (req, res, next) => {
+Router.post("/category", (req, res, next) => requireAuth(req, res, next, "Category", "CREATE"), (req, res, next) => {
     const Controller = new CategoryController(req);
     Controller.create(req, res, next);
 });
 
 //Ebooki
 
-Router.get("/ebook", requireAuth, (req, res, next) => {
+Router.get("/ebook", (req, res, next) => requireAuth(req, res, next, "Ebook", "DISPLAY"), (req, res, next) => {
     const Controller = new EbookController(req);
     Controller.getList(req, res, next);
 });
 
-Router.get("/ebook/:id", requireAuth, (req, res, next) => {
+Router.get("/ebook/:id", (req, res, next) => requireAuth(req, res, next, "Ebook", "DISPLAY"), (req, res, next) => {
     const Controller = new EbookController(req);
     Controller.get(req, res, next);
 });
 
-Router.post("/ebook", requireAuth, cpUpload, (req, res, next) => {
+Router.post("/ebook", (req, res, next) => requireAuth(req, res, next, "Ebook", "CREATE"), cpUpload, (req, res, next) => {
     const Controller = new EbookController(req);
     Controller.create(req, res, next);
 });
 
-Router.put("/ebook/:id", requireAuth, cpUpload, (req, res, next) => {
+Router.put("/ebook/:id", (req, res, next) => requireAuth(req, res, next, "Ebook", "EDIT"), cpUpload, (req, res, next) => {
     const Controller = new EbookController(req);
     Controller.update(req, res, next);
 });
 
-Router.delete("/ebook/:id", requireAuth, (req, res, next) => {
+Router.delete("/ebook/:id", (req, res, next) => requireAuth(req, res, next, "Ebook", "DELETE"), (req, res, next) => {
     const Controller = new EbookController(req);
     Controller.delete(req, res, next);
 });

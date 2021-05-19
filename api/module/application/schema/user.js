@@ -34,6 +34,11 @@ const userSchema = baseSchema.generateSchema(
             type: String,
             required: [true, "Wartość jest wymagana"],
             minlength: [1, "Nieprawidłowa wartość"]
+        },
+        role: {
+            type: Schema.Types.ObjectId,
+            required: [true, "Wartość jest wymagana"],
+            ref: "Role",
         }
     }, {
         collection: 'user_user'
