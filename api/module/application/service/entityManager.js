@@ -18,7 +18,6 @@ class EntityManager {
     initModel(name) {
         const { classmap } = config;
         let registered = mongoose.modelNames();
-
         if (!_.includes(registered, name) && _.has(classmap, name)) {
             mongoose.model(name, require(global.appRoot + "/module/" + classmap[name]));
         }

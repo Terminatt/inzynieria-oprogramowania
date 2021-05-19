@@ -1,0 +1,5 @@
+const POSSIBLE_PERMISSIONS = ['DISPLAY', 'CREATE', 'EDIT', 'DELETE', 'SOFT DELETE'];
+
+module.exports = {
+  POSSIBLE_PERMISSIONS
+}

@@ -90,8 +90,8 @@ function Dashboard() {
 
   const renderEbooks = (ebooks: Ebook[]) => {
     return ebooks.map((el) => (
-      <Col className="item-card" xs={6}>
-        <EbookCard key={el._id} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
+      <Col key={el._id} className="item-card" xs={6}>
+        <EbookCard onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
       </Col>
     ))
   }
