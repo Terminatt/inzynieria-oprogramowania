@@ -78,7 +78,6 @@ class BaseModel {
             if (!_.isEmpty(filter)) {
                 params.unshift({ $match: filter });
             }
-            console.log(params)
             let results = await this.getModel(this.getDocumentClass()).aggregate(params);
             let total = _.get(results, '[0].total', 0);
             results = _.get(results, '[0].results', []);;

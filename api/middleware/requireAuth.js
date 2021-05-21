@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const userSchema = require("../module/application/schema/user");
 const _ = require("lodash");
+const aclSchema = require("../module/application/schema/acl");
 
 module.exports = async (req, res, next, entity, action) => {
   try {
@@ -25,8 +26,8 @@ module.exports = async (req, res, next, entity, action) => {
           loggedUser._id = loggedUser._id.toString();
           req.loggedUser = loggedUser;
         }
-        if (loggedUser.role.name !== "superAdmin") {
-          const acl = await mongoose.model("Acl").findOne({
+        if (!loggedUser.role.superAdmin) {
+          const acl = await mongoose.model("Acl", aclSchema).findOne({
             entityName: entity,
             role: loggedUser.role._id
           });

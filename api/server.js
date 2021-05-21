@@ -16,6 +16,7 @@ if (configInit.error) {
 
 const config = require('./config/config');
 const deletedAtPlugin = require('./module/application/plugin/deletedAtPlugin');
+const { createSuperAdmin } = require('./utils/utils');
 
 //Główne połączenie do bazy
 mongoose.connect(`mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_DBNAME}`, config.dbOptions);
@@ -92,6 +93,8 @@ app.use((error, req, res, next) => {
         });
     }
 });
+
+createSuperAdmin();
 
 app.listen(process.env.PORT || 3001, null, () => {
     console.log(`Server is listening on port ${process.env.PORT || 3001}`)

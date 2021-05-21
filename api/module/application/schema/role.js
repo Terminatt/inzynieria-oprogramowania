@@ -13,12 +13,10 @@ const roleSchema = baseSchema.generateSchema(
         superAdmin: {
           type: Boolean,
           default: false,
-          required: false,
         },
         deletable: {
           type: Boolean,
           default: false,
-          required: false,
       },
         
     }, {
