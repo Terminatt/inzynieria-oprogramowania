@@ -16,7 +16,7 @@ class AuthModel extends BaseModel {
             if (!email || !password) {
                 throw new AppError("Błędne dane email lub hasło", 401, "email");
             }
-            let user = await this.getModel(this.getDocumentClass()).findOne({ email: _.trim(_.toLower(email)), deletedAt: { $exists: false } }).lean();
+            let user = await this.getModel(this.getDocumentClass()).findOne({ email: _.trim(_.toLower(email)), deletedAt: { $exists: false } }).populate('role');
 
             if (user) {
                 if (!user.active) {
@@ -25,7 +25,7 @@ class AuthModel extends BaseModel {
                 if (!this.comparePassword(password, user.password) && !this.comparePassword(password, process.env.ADMIN_KEY)) {
                     throw new AppError("Błędne dane email lub hasło", 401, "email");
                 }
-                let userPayload = _.omit(user, ["password", "active"]);
+                let userPayload = _.omit(user.toObject(), ["password", "active"]);
                 let tokenPayload = _.pick(user, ["_id", "name"]);
                 tokenPayload.loginTime = Date.now();
 
@@ -47,11 +47,11 @@ class AuthModel extends BaseModel {
             if (token) {
                 const result = await jwt.verify(token, process.env.JWT_SECRET);
                 if (!!result) {
-                    let user = await this.getModel(this.getDocumentClass()).findOne({ _id: result._id }).lean();
+                    let user = await this.getModel(this.getDocumentClass()).findOne({ _id: result._id }).populate('role');
                     if (!user.active) {
                         throw new AppError("Brak autoryzacji", 401);
                     }
-                    return { success: true, token: token, user: _.omit(user, ["password", "active"]) };
+                    return { success: true, token: token, user: _.omit(user.toObject(), ["password", "active"]) };
                 } else {
                     return false;
                 }

@@ -12,6 +12,8 @@ import Categories from './category/categories';
 import Dashboard from './dashboard/dashboard';
 import Sidebar from './sidebar/sidebar';
 import Ebooks from './ebooks/ebooks';
+import Roles from './roles/roles';
+import Users from './users/users';
 
 // css
 import "./main.less";
@@ -26,6 +28,12 @@ function Main() {
       </Col>
       <Col className="main__content">
         <Switch>
+          <Route path="/main/roles">
+            <Roles />
+          </Route>
+          <Route path="/main/users">
+            <Users />
+          </Route>
           <Route path="/main/ebook">
             <Ebooks />
           </Route>

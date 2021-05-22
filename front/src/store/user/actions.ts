@@ -8,7 +8,7 @@ import BaseResponse from "../base/BaseResponse";
 
 // redux
 import * as CONS from "./constants";
-import { LoginPayload, LoginResponse, RegisterPayload } from "./types";
+import { LoginPayload, LoginResponse, RegisterPayload, User } from "./types";
 
 // handle loading
 const handleStarted = () => {
@@ -55,7 +55,7 @@ export const loginUser = (payload: LoginPayload, cb?: () => void) => {
     dispatch(handleStarted())
     try {
       const results = await axios.post<LoginResponse>("/login", payload);
-      dispatch(loginUserFinished(results.data.documents))
+      dispatch(loginUserFinished(results.data.user))
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);
@@ -80,7 +80,7 @@ export const isAuth = (token: string, cb?: () => void) => {
     dispatch(handleStarted())
     try {
       const results = await axios.get<LoginResponse>("/isAuth");
-      dispatch(loginUserFinished(results.data.documents))
+      dispatch(loginUserFinished(results.data.user))
       dispatch(handleFinished())
 
       Utils.setToken(results.data.token);
@@ -97,7 +97,7 @@ export const isAuth = (token: string, cb?: () => void) => {
   };
 }
 
-const loginUserFinished = (data: any) => {
+const loginUserFinished = (data: User) => {
   return {
     type: CONS.LOGIN_USER_FINISHED,
     data,
