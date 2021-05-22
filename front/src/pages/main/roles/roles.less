@@ -1,0 +1,51 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/mixins.less';
+
+.roles {
+  height: 100%;
+  width: 100%;
+  padding: 20px 20px 20px 20px;
+  overflow-y: auto;
+  flex-wrap: nowrap !important;
+
+  &__board {
+    padding: 12px;
+    height: 100%;
+    width: 100%;
+    background-color: @color-white;
+    .box-shadow-subtle();
+  }
+
+  &__header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid @color-grey;
+  }
+
+  &__role {
+    padding: 0 4px 0 4px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    transition: all 0.4s;
+    border-radius: 4px;
+    cursor: pointer;
+
+    div {
+      width: max-content;
+    }
+
+    div:not(:last-child) {
+      margin-right: 6px;
+    }
+  }
+
+  &__role:hover {
+    background-color: @color-grey-hover;
+  }
+
+  &__board:last-child {
+    margin-left: 12px;
+  }
+}
