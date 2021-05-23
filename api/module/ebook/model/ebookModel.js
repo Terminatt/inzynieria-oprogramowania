@@ -11,6 +11,47 @@ class EbookModel extends BaseModel {
         this.setDocumentClass("Ebook");
     }
 
+    async getList(params) {
+        try {
+            let result = await super.getList(params);
+            result.documents = await this.getAverageRating(result.documents);
+            return result;
+        } catch (err) {
+            throw new AppError(err.message, err.status);
+        }
+    }
+
+    async get(id) {
+        try {
+            let document = await super.get(id);
+            document = await this.getAverageRating(document);
+            return document;
+        } catch (err) {
+            throw new AppError(err.message, err.status);
+        }
+    }
+    
+    async getAverageRating(documents) {
+        try {
+            await Promise.all(_.castArray(documents).map(async (document) => {
+                let documentRatings = await this.getModel("Review").find({ ebookId: document._id }).lean();
+                if (documentRatings.length > 0) {
+                    let sum = 0;
+                    _.each(documentRatings, (rating) => sum += rating.stars);
+                    document.nrOfRatings = _.size(documentRatings);
+                    document.averageRating = _.round(sum / _.size(documentRatings), 1)
+                } else {
+                    document.nrOfRatings = 0;
+                    document.averageRating = null;
+                }
+                return document;
+            }));
+            return documents;
+        } catch (err) {
+            throw new AppError(err.message, err.status);
+        }
+    }
+
     async create(data) {
         try {
             let result = await super.create(data);

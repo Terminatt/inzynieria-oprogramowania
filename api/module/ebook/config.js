@@ -5,6 +5,7 @@ const upload = multer({ dest: __dirname + '/../../tmp', limits: { fileSize: 2097
 const cpUpload = upload.any();
 const requireAuth = require("../../middleware/requireAuth");
 const EbookController = require("./controller/ebookController");
+const ReviewController = require("./controller/reviewController");
 const CategoryController = require("./controller/categoryController");
 
 //Kategorie
@@ -58,6 +59,33 @@ Router.put("/ebook/:id", (req, res, next) => requireAuth(req, res, next, "Ebook"
 
 Router.delete("/ebook/:id", (req, res, next) => requireAuth(req, res, next, "Ebook", "DELETE"), (req, res, next) => {
     const Controller = new EbookController(req);
+    Controller.delete(req, res, next);
+});
+
+//Ebooki
+
+Router.get("/review", (req, res, next) => requireAuth(req, res, next, "Review", "DISPLAY"), (req, res, next) => {
+    const Controller = new ReviewController(req);
+    Controller.getList(req, res, next);
+});
+
+Router.get("/review/:id", (req, res, next) => requireAuth(req, res, next, "Review", "DISPLAY"), (req, res, next) => {
+    const Controller = new ReviewController(req);
+    Controller.get(req, res, next);
+});
+
+Router.post("/review", (req, res, next) => requireAuth(req, res, next, "Review", "CREATE"), cpUpload, (req, res, next) => {
+    const Controller = new ReviewController(req);
+    Controller.create(req, res, next);
+});
+
+Router.put("/review/:id", (req, res, next) => requireAuth(req, res, next, "Review", "EDIT"), cpUpload, (req, res, next) => {
+    const Controller = new ReviewController(req);
+    Controller.update(req, res, next);
+});
+
+Router.delete("/review/:id", (req, res, next) => requireAuth(req, res, next, "Review", "DELETE"), (req, res, next) => {
+    const Controller = new ReviewController(req);
     Controller.delete(req, res, next);
 });
 
