@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const applicationModuleConfig = require("./module/application/config");
 const ebookModuleConfig = require("./module/ebook/config");
+const userModuleConfig = require("./module/user/config");
 let configInit = dotenv.config();
 if (configInit.error) {
     throw "Niepoprawna konfiguracja pliku '.env'."
@@ -62,6 +63,7 @@ app.get('/media/:name', (req, res, next) => {
 
 app.use("/", applicationModuleConfig);
 app.use("/ebook", ebookModuleConfig);
+app.use("/user", userModuleConfig);
 
 //Zwrotka 404 dla nieistniejących routów
 app.use((req, res, next) => {

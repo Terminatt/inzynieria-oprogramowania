@@ -4,5 +4,6 @@ module.exports = {
     "Category": "ebook/schema/category",
     "Ebook": "ebook/schema/ebook",
     "Role": "application/schema/role",
-    "Acl": "application/schema/acl"
+    "Acl": "application/schema/acl",
+    "Library": "user/schema/library"
 }

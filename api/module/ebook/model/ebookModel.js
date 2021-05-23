@@ -1,7 +1,7 @@
 const BaseModel = require('../../application/model/baseModel');
+const LibraryModel = require('../../user/model/libraryModel');
 const fs = require('fs');
 const _ = require('lodash');
-const mongoose = require("mongoose");
 const moment = require("moment");
 const findNextFileName = require('find-next-file-name');
 
@@ -11,12 +11,32 @@ class EbookModel extends BaseModel {
         this.setDocumentClass("Ebook");
     }
 
+    async create(data) {
+        try {
+            let result = await super.create(data);
+            //Dodanie utworzonego ebooka do biblioteki użytkownika
+            let libraryModel = new LibraryModel(this.getReq());
+            await libraryModel.create({ ebookId: result._id });
+            return result;
+        } catch (err) {
+            if (err.name === 'ValidationError') {
+                throw new AppError(this.parseValidationErrors(err), 422);
+            } else {
+                throw new AppError(err.message, err.status);
+            }
+        }
+    }
+
     async setAllData(data, document) {
         try {
             this.setAllowedData(data, document);
 
             if ('title' in data) {
-                document = await this.setTitle(document, data.title);
+                document.title = data.title;
+            }
+
+            if ('description' in data) {
+                document.description = data.description;
             }
 
             if ('author' in data) {
@@ -47,19 +67,20 @@ class EbookModel extends BaseModel {
                 document = await this.setFiles(document, this.getReq().files);
             }
 
+            await this.checkExists(document);
+
             return document;
         } catch (err) {
             throw new AppError(err.message, err.status);
         }
     }
 
-    async setTitle(document, title) {
+    async checkExists(document) {
         try {
-            let categoryDocument = await this.getModel(this.getDocumentClass()).findOne({ title: title, creator: this.getLoggedUser()._id, _id: { $ne: document._id } }).lean();
-            if (categoryDocument) {
-                this.addValidationError("Ebook o tym tytule już istnieje", "title");
+            let ebookDocument = await this.getModel(this.getDocumentClass()).findOne({ title: document.title, author: document.author, _id: { $ne: document._id } }).lean();
+            if (ebookDocument) {
+                this.addValidationError("Ebook o tym tytule i autorze już istnieje", "title");
             }
-            document.title = title;
             return document;
         } catch (err) {
             throw new AppError(err.message, err.status);
@@ -69,10 +90,9 @@ class EbookModel extends BaseModel {
     async setCategories(document, categories) {
         try {
             document.categories = [];
-            let loggedUser = this.getLoggedUser();
 
             let promises = categories.map(async (category, index) => {
-                let categoryDocument = await this.getModel("Category").findOne({ _id: category, creator: loggedUser._id }).lean();
+                let categoryDocument = await this.getModel("Category").findOne({ _id: category }).lean();
                 if (categoryDocument) {
                     document.categories.push(categoryDocument);
                 } else {
@@ -86,38 +106,12 @@ class EbookModel extends BaseModel {
         }
     }
 
-    async getList(params) {
-        try {
-            return super.getList(params, { creator: mongoose.Types.ObjectId(this.getLoggedUser()._id) });
-        } catch (err) {
-            throw new AppError(err.message, err.status);
-        }
-    }
-
-    async get(id) {
-        try {
-            return super.get(id, { creator: mongoose.Types.ObjectId(this.getLoggedUser()._id) });
-        } catch (err) {
-            throw new AppError(err.message, err.status);
-        }
-    }
-
-    async delete(id) {
-        try {
-            return super.delete(id, { creator: mongoose.Types.ObjectId(this.getLoggedUser()._id) });
-        } catch (err) {
-            throw new AppError(err.message, err.status);
-        }
-    }
-
     async setFiles(document, files) {
         try {
             if (_.isArray(files)) {
                 let promises = files.map(async (file) => {
                     if (file.fieldname === "coverImage") {
                         document.coverImage = await this.setFile(file);
-                    } else if (file.fieldname === "file") {
-                        document.file = await this.setFile(file);
                     }
                 });
                 await Promise.all(promises);
@@ -140,7 +134,7 @@ class EbookModel extends BaseModel {
                 let src = dir + `/${fileName}`;
                 fs.writeFileSync(src, fs.readFileSync(file.path));
                 // document.name = fileName;
-                return `${process.env.API_HOST}/media/${fileName}`;
+                return fileName;
             } else {
                 throw new AppError("No file", 404);
             }
