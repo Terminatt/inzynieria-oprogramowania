@@ -6,37 +6,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // redux
-import { addOrCreatePermission, getPermissionTypes, getRolesCollection, selectRole } from '../../../store/roles/actions';
+import { addOrCreatePermission, getPermissionForRole, getPermissionTypes, getRolesCollection, selectRole } from '../../../store/roles/actions';
+import { Permission } from '../../../store/roles/types';
 
 import { AppState } from '../../../store';
 import { Role } from '../../../store/user/types';
 
 // antd
-import { Button, Col, Row } from 'antd';
+import { Button, Col, notification, Row } from 'antd';
 import { UserOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 // custom
 import Loading from '../../../components/loading/loading';
+import CustomCheckbox from '../../../components/checkbox/checkbox';
 
 // utils
 import Utils from '../../../utils/utls';
 
 // css
 import "./roles.less";
-import { Permission } from '../../../store/roles/types';
 
 // components
 
 function Roles() {
   const dispatch = useDispatch();
   const roles = useSelector((state: AppState) => state.roles);
-  const { isLoading, selected, permissionTypes } = roles;
+  const { isLoading, selected, permissionTypes, permissionsCollection } = roles;
 
   const [permissions, setPermissions] = useState<{ [key: string]: string[] }>({})
 
   useEffect(() => {
-    dispatch(getRolesCollection());
+    dispatch(getRolesCollection())
     dispatch(getPermissionTypes())
   }, [dispatch])
 
@@ -45,6 +45,7 @@ function Roles() {
       dispatch(selectRole(null))
     } else {
       dispatch(selectRole(role))
+      dispatch(getPermissionForRole(role._id))
     }
   }
 
@@ -65,7 +66,9 @@ function Roles() {
   const savePermissions = () => {
     const data = prepareDataForSending();
     if (data) {
-      dispatch(addOrCreatePermission(data))
+      dispatch(addOrCreatePermission(data, () => {
+        notification.success({ message: "Pomyślnie zaktualizowano role" })
+      }))
     }
   }
 
@@ -96,18 +99,28 @@ function Roles() {
     setPermissions(permissionsCopy);
   }
 
+  const checkIfChecked = (entity: string, perm: string) => {
+    const entityPerms = permissionsCollection.find((el) => el.entityName === entity);
+
+    if (!entityPerms) {
+      return false;
+    }
+
+    return entityPerms.permissions.includes(perm);
+  }
+
   const renderPermissions = () => {
     const permissionRows: React.ReactNode[] = [];
     if (permissionTypes) {
       for (const [key, value] of Object.entries(permissionTypes)) {
         permissionRows.push((
-          <Col key={key} className="roles__permission" xs={24}>
+          <Col key={selected?._id + key} className="roles__permission" xs={24}>
             <Row className="roles__header">
               <h3>{key}</h3>
             </Row>
             <Row className="roles__checkboxes">
               {value.map((perm: string) => (
-                <Checkbox onChange={(checked) => onCheckboxChange(checked.target.checked, perm, key)} key={perm}>{Utils.initCap(perm)}</Checkbox>
+                <CustomCheckbox initialChecked={checkIfChecked(key, perm)} onCheckboxChange={(checked) => onCheckboxChange(checked, perm, key)} key={perm + selected?._id}>{Utils.initCap(perm)}</CustomCheckbox>
               ))}
             </Row>
           </Col>

@@ -195,7 +195,7 @@ const getPermissionTypesFinished = (data: Permissions) => {
   } as const
 }
 
-export const getPermissionForRole = (id: string, cb?: () => void) => {
+export const getPermissionForRole = (id: Id, cb?: () => void) => {
   return async (dispatch: Dispatch<RolesActions>) => {
     dispatch(handleRoleStarted());
     try {
