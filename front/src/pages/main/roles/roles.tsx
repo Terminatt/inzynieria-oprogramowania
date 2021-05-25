@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // redux
-import { addOrCreatePermission, getPermissionForRole, getPermissionTypes, getRolesCollection, selectRole } from '../../../store/roles/actions';
+import { addOrCreatePermission, getPermissionForRole, getPermissionTypes, getRolesCollection, selectRole, } from '../../../store/roles/actions';
 import { Permission } from '../../../store/roles/types';
 
 import { AppState } from '../../../store';
 import { Role } from '../../../store/user/types';
 
 // antd
-import { Button, Col, notification, Row } from 'antd';
-import { UserOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Col, notification, Row, Tooltip } from 'antd';
+import { UserOutlined, PlusCircleOutlined, DeleteOutlined, StopOutlined } from '@ant-design/icons';
 
 // custom
 import Loading from '../../../components/loading/loading';
@@ -80,6 +80,9 @@ function Roles() {
         </div>
         <div>
           {el.name}
+        </div>
+        <div className="roles__icon">
+          {!el.deletable ? <Tooltip overlay="Tej roli nie można usunąć" ><span className="red"><StopOutlined /></span></Tooltip> : null}
         </div>
       </Row>
     ))
