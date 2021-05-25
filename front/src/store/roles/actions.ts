@@ -5,7 +5,7 @@ import { ErrorResponse } from "../base/BaseErrorResponse";
 import BaseResponse from "../base/BaseResponse";
 import { Role } from "../user/types";
 import * as CONS from './constants';
-import { RolePayload } from "./types";
+import { Permission, Permissions, RolePayload } from "./types";
 
 // handle loading
 const handleRoleStarted = () => {
@@ -167,7 +167,90 @@ const deleteRoleFinished = (data: Role[]) => {
   } as const
 }
 
+export const getPermissionTypes = (cb?: () => void) => {
+  return async (dispatch: Dispatch<RolesActions>) => {
+    dispatch(handleRoleStarted());
+    try {
+      const results = await axios.get<BaseResponse<Permissions>>(`/permissions/types`);
+
+      if(results.data.documents) {
+          dispatch(getPermissionTypesFinished(results.data.documents))
+      }
+
+      dispatch(handleRoleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleRoleError());
+    }
+  };
+}
+
+const getPermissionTypesFinished = (data: Permissions) => {
+  return {
+    type: CONS.GET_PERMISSION_TYPES_FINISHED,
+    data,
+  } as const
+}
+
+export const getPermissionForRole = (id: string, cb?: () => void) => {
+  return async (dispatch: Dispatch<RolesActions>) => {
+    dispatch(handleRoleStarted());
+    try {
+      const results = await axios.get<BaseResponse<Permission[]>>(`/permissions/${id}`);
+
+      if(results.data.documents) {
+          dispatch(getPermissionForRoleFinished(results.data.documents))
+      }
+
+      dispatch(handleRoleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleRoleError());
+    }
+  };
+}
+
+const getPermissionForRoleFinished = (data: Permission[]) => {
+  return {
+    type: CONS.GET_PERMISSIONS_FOR_ROLE_FINISHED,
+    data,
+  } as const
+}
+
+export const addOrCreatePermission = (cb?: () => void) => {
+  return async (dispatch: Dispatch<RolesActions>) => {
+    dispatch(handleRoleStarted());
+    try {
+      await axios.post<BaseResponse<null>>(`/permissions`);
+
+      dispatch(handleRoleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleRoleError());
+    }
+  };
+}
+
+
+const selectRole = (data: Role) => {
+  return {
+    type: CONS.SELECT_ROLE,
+    data,
+  } as const
+}
+
 
 export type RolesActions = ReturnType<typeof handleRoleStarted | typeof handleRoleFinished | typeof handleRoleError |
-typeof getRolesCollectionFinished | typeof getRoleFinished | typeof createRoleFinished | typeof updateRoleFinished | typeof deleteRoleFinished
+typeof getRolesCollectionFinished | typeof getRoleFinished | typeof createRoleFinished | typeof updateRoleFinished | typeof deleteRoleFinished | 
+typeof getPermissionTypesFinished | typeof getPermissionForRoleFinished |
+typeof selectRole
 >;

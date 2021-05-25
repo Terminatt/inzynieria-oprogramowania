@@ -8,6 +8,8 @@ const initialState: RoleState = {
   selected: null,
   isLoading: false,
   error: null,
+  permissionTypes: null,
+  permissionsCollection: [],
 }
 
 
@@ -30,9 +32,10 @@ export default function rolesReducer(state = initialState, action: RolesActions)
           error: action.error,
         }
     case CONS.GET_ROLE_FINISHED:
+    case CONS.SELECT_ROLE:
         return {
           ...state,
-          selected: action.data,
+          selected: action.data
         }
     case CONS.GET_ROLES_FINISHED:
     case CONS.CREATE_ROLE_FINISHED:
@@ -41,6 +44,16 @@ export default function rolesReducer(state = initialState, action: RolesActions)
       return {
         ...state,
         collection: action.data,
+      }
+    case CONS.GET_PERMISSION_TYPES_FINISHED:
+      return {
+        ...state,
+        permissionTypes: action.data,
+      }
+    case CONS.GET_PERMISSIONS_FOR_ROLE_FINISHED:
+      return {
+        ...state,
+        permissionsCollection: action.data,
       }
     default:
       return state
