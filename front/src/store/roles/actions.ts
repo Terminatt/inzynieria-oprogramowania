@@ -223,11 +223,11 @@ const getPermissionForRoleFinished = (data: Permission[]) => {
   } as const
 }
 
-export const addOrCreatePermission = (cb?: () => void) => {
+export const addOrCreatePermission = (permissions: Partial<Permission>[], cb?: () => void) => {
   return async (dispatch: Dispatch<RolesActions>) => {
     dispatch(handleRoleStarted());
     try {
-      await axios.post<BaseResponse<null>>(`/permissions`);
+      await axios.post<BaseResponse<null>>(`/permissions`, permissions);
 
       dispatch(handleRoleFinished());
       if(cb) {
@@ -241,7 +241,7 @@ export const addOrCreatePermission = (cb?: () => void) => {
 }
 
 
-const selectRole = (data: Role) => {
+export const selectRole = (data: Role | null) => {
   return {
     type: CONS.SELECT_ROLE,
     data,

@@ -5,10 +5,10 @@
   height: 100%;
   width: 100%;
   padding: 20px 20px 20px 20px;
-  overflow-y: auto;
   flex-wrap: nowrap !important;
 
   &__board {
+    position: relative;
     padding: 12px;
     height: 100%;
     width: 100%;
@@ -39,6 +39,10 @@
     div:not(:last-child) {
       margin-right: 6px;
     }
+
+    &--active {
+      background-color: @color-grey-hover;
+    }
   }
 
   &__role:hover {
@@ -47,5 +51,31 @@
 
   &__board:last-child {
     margin-left: 12px;
+  }
+
+  &__add {
+    .vertical-center();
+    justify-content: flex-end;
+  }
+
+  &__btn {
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
+  }
+
+
+  &__permission {
+    padding: 16px;
+  }
+
+  &__checkboxes {
+    margin-left: 12px;
+  }
+
+  &__edit {
+    border-top: 1px solid @color-grey;
+    padding: 12px 12px 0 0;
+    text-align: right;
   }
 }

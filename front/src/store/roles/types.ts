@@ -1,4 +1,4 @@
-import { BaseEntity } from "../base/BaseEntity";
+import { BaseEntity, Id } from "../base/BaseEntity";
 import { ErrorResponse } from "../base/BaseErrorResponse";
 import { Role } from "../user/types";
 
@@ -27,5 +27,5 @@ export interface Permissions {
 export interface Permission extends BaseEntity {
   permissions: string[],
   entityName: string,
-  role: string,
+  role: Id,
 }

@@ -9,30 +9,34 @@ class AclModel extends BaseModel {
 
   async createOrUpdate(data) {
     try {
-        let documentClass = this.getDocumentClass();
-        let model = this.getModel(documentClass);
-        let document = new model();
-        document = this.setAllData(data, document);
-        let errors = this.validateDocument(document);
-        if (errors) {
-          throw errors;
-        }
-        let result = await model.findOneAndUpdate({
-          entityName: document.entityName,
-          role: document.role,
-        }, {
-          entityName: document.entityName,
-          permissions: document.permissions,
-          role: document.role,
-        }, {
-          useFindAndModify: false,
-          upsert: true,
-          new: true,
-        });
-        if (result) {
-            return result;
-        } else {
-            throw new AppError("Wystąpił błąd przy zapisie dokumentu", 422);
+
+        for(const el of data) {
+          let documentClass = this.getDocumentClass();
+          let model = this.getModel(documentClass);
+          let document = new model();
+          document = this.setAllData(data, el);
+          let errors = this.validateDocument(el);
+          if (errors) {
+            throw errors;
+          }
+          let result = await model.findOneAndUpdate({
+            entityName: document.entityName,
+            role: document.role,
+          }, {
+            entityName: document.entityName,
+            permissions: document.permissions,
+            role: document.role,
+          }, {
+            useFindAndModify: false,
+            upsert: true,
+            new: true,
+          });
+          if (result) {
+              return result;
+          } else {
+              throw new AppError("Wystąpił błąd przy zapisie dokumentu", 422);
+          }
+
         }
     } catch (err) {
         if (err.name === 'ValidationError') {

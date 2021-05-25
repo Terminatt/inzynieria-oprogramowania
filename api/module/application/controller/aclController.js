@@ -30,7 +30,7 @@ class AclController extends BaseController {
 
   async getPermissionTypes(req, res, next) {
     try {
-        res.status(201).send({ success: true, document: PERMISSIONS });
+        res.status(200).send({ success: true, documents: PERMISSIONS });
     } catch (err) {
         next(err);
     }
