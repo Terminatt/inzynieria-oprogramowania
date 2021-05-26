@@ -22,7 +22,7 @@ function Sidebar() {
       <Row>
         <Menu defaultOpenKeys={['user', 'admin']} mode="inline" selectedKeys={[pathname]} className="sidebar__menu" theme="dark">
           {userState.user?.role.superAdmin ? (
-            <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="user" title="Workspace">
+            <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="main" title="Ogólne">
               <Menu.Item key="/main" icon={<HomeOutlined />}>
                 <Link to="/main">
                   Dashboard
@@ -36,6 +36,15 @@ function Sidebar() {
               <Menu.Item key="/main/ebook" icon={<BookOutlined />}>
                 <Link to="/main/ebook">
                   Ebooki
+              </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
+          ) : null}
+          {userState.user?.role.superAdmin ? (
+            <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="user" title="Twoja strefa">
+              <Menu.Item key="/main/my-ebook" icon={<BookOutlined />}>
+                <Link to="/main/ebook">
+                  Moje Ebooki
               </Link>
               </Menu.Item>
             </Menu.SubMenu>
