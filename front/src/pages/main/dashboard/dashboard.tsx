@@ -78,10 +78,14 @@ function Dashboard() {
     for (const [key, ebooks] of Object.entries(dict)) {
       elements.push((
         <Row className="dashboard__row" key={key}>
-          <Header>{key}</Header>
-          <Row className="dashboard__cards">
-            {renderEbooks(ebooks)}
-          </Row>
+          <Col xs={24}>
+            <Header>{key}</Header>
+          </Col>
+          <Col xs={24}>
+            <Row className="dashboard__cards">
+              {renderEbooks(ebooks)}
+            </Row>
+          </Col>
         </Row>
       ))
     }

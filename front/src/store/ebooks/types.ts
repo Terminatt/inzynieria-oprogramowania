@@ -4,6 +4,8 @@ import { Category } from "../category/types";
 
 export interface EbooksState {
   collection: Ebook[];
+  userCollection: Ebook[];
+  userSelected: Ebook | null;
   selected: Ebook | null;
   isLoading: boolean;
   error?: ErrorResponse | null;
