@@ -79,7 +79,7 @@ function EbooksModal() {
       maskClosable={true}
       destroyOnClose
       onCancel={onClose}
-      title={isAdd ? "Stwórz nową kategorię" : "Edytuj kategorię"}
+      title={isAdd ? "Stwórz nowego ebooka" : "Edytuj ebooka"}
       okText="Zamknij"
       cancelButtonProps={{ style: { display: "none" } }}
       okButtonProps={{ disabled: isLoading, loading: isLoading }}

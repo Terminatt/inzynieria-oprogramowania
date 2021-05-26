@@ -12,7 +12,7 @@ class RoleModel extends BaseModel {
         if ('name' in data) {
             document = await this.setTitle(document, data.name);
         }
-        document.superAdmin = true;
+        document.superAdmin = false;
         document.deletable = true;
 
         return document;

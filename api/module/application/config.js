@@ -41,12 +41,12 @@ Router.post("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "C
     Controller.create(req, res, next);
 })
 
-Router.put("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "EDIT"), (req, res, next) => {
+Router.put("/roles/:id", (req, res, next) => requireAuth(req, res, next, "Role", "EDIT"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.update(req, res, next);
 })
 
-Router.delete("/roles", (req, res, next) => requireAuth(req, res, next, "Role", "DELETE"), (req, res, next) => {
+Router.delete("/roles/:id", (req, res, next) => requireAuth(req, res, next, "Role", "DELETE"), (req, res, next) => {
     const Controller = new RolesController();
     Controller.delete(req, res, next);
 })

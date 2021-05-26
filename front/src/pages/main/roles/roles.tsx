@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // redux
-import { addOrCreatePermission, getPermissionForRole, getPermissionTypes, getRolesCollection, selectRole, } from '../../../store/roles/actions';
+import { addOrCreatePermission, deleteRole, getPermissionForRole, getPermissionTypes, getRolesCollection, selectRole, } from '../../../store/roles/actions';
 import { Permission } from '../../../store/roles/types';
-
+import { openModal } from '../../../store/modals/actions';
 import { AppState } from '../../../store';
 import { Role } from '../../../store/user/types';
+import { ModalType } from '../../../store/modals/types';
 
 // antd
 import { Button, Col, notification, Row, Tooltip } from 'antd';
@@ -19,6 +20,7 @@ import { UserOutlined, PlusCircleOutlined, DeleteOutlined, StopOutlined } from '
 // custom
 import Loading from '../../../components/loading/loading';
 import CustomCheckbox from '../../../components/checkbox/checkbox';
+import RolesModal from '../../../components/modals/roles-modal/roles-modal';
 
 // utils
 import Utils from '../../../utils/utls';
@@ -123,7 +125,7 @@ function Roles() {
             </Row>
             <Row className="roles__checkboxes">
               {value.map((perm: string) => (
-                <CustomCheckbox initialChecked={checkIfChecked(key, perm)} onCheckboxChange={(checked) => onCheckboxChange(checked, perm, key)} key={perm + selected?._id}>{Utils.initCap(perm)}</CustomCheckbox>
+                <CustomCheckbox disabled={selected?.superAdmin} initialChecked={selected?.superAdmin || checkIfChecked(key, perm)} onCheckboxChange={(checked) => onCheckboxChange(checked, perm, key)} key={perm + selected?._id}>{Utils.initCap(perm)}</CustomCheckbox>
               ))}
             </Row>
           </Col>
@@ -136,6 +138,23 @@ function Roles() {
 
   const deleteDisabled = !selected || !selected.deletable;
 
+  const onRoleBtnClick = () => {
+    if (!!selected) {
+      dispatch(openModal(ModalType.EDIT_ROLE))
+    } else {
+      dispatch(openModal(ModalType.ADD_ROLE))
+    }
+  }
+
+  const onDelete = () => {
+    if (!!selected) {
+      dispatch(deleteRole(selected._id, () => {
+        dispatch(getRolesCollection())
+        dispatch(selectRole(null))
+      }))
+    }
+  }
+
   return (
     <Row className="scroll-container">
       <Loading isLoading={isLoading} />
@@ -146,8 +165,8 @@ function Roles() {
               <h2>Role ({roles.collection.length !== 0 ? roles.collection.length : null})</h2>
             </Col>
             <Col className="roles__add" xs={12}>
-              <Button className="roles__btn" icon={<PlusCircleOutlined />} size="small" type="primary">Dodaj</Button>
-              <Button disabled={deleteDisabled} className="roles__btn btn--delete" icon={<DeleteOutlined />} size="small" type="primary">Usuń</Button>
+              <Button onClick={onRoleBtnClick} disabled={selected ? !selected.deletable : false} className="roles__btn" icon={<PlusCircleOutlined />} size="small" type="primary">{!!selected ? "Edytuj" : "Dodaj"}</Button>
+              <Button onClick={onDelete} disabled={deleteDisabled} className="roles__btn btn--delete" icon={<DeleteOutlined />} size="small" type="primary">Usuń</Button>
             </Col>
           </Row>
           <Scrollbars className="scrollbar" style={{ height: "calc(100% - 50px)" }}>
@@ -168,6 +187,7 @@ function Roles() {
           </Row>
         </Col>
       </Row>
+      <RolesModal />
     </Row>
   );
 }

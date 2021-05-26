@@ -9,9 +9,7 @@ class AclModel extends BaseModel {
 
   async createOrUpdate(data) {
     try {
-      console.log(data);
       for(const el of data) {
-          console.log(el)
           let documentClass = this.getDocumentClass();
           let model = this.getModel(documentClass);
           let document = new model();
