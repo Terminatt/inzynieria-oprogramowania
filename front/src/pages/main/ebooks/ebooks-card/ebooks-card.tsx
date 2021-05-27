@@ -100,8 +100,8 @@ function EbookCard(props: ComponentProps) {
     <Card className={["card", addCard ? "add" : "", props.className ? props.className : ""].join(" ")}
       onClick={onClick}
       cover={addCard ? null : (
-        <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "coverImage")}>
-          <img className="card__cover" alt="ebook cover" src={props.data?.coverImage ? props.data.coverImage : "https://bibliotekant.pl/wp-content/uploads/2021/04/placeholder-image.png"} />
+        <Upload fileList={[]} beforeUpload={!myEbook ? (file) => handleUpload(file, "coverImage") : undefined}>
+          <img className="card__cover" alt="ebook cover" src={props.data?.coverImage ? getBaseUrl() + 'media/' + props.data.coverImage : "https://bibliotekant.pl/wp-content/uploads/2021/04/placeholder-image.png"} />
         </Upload>
 
       )}
