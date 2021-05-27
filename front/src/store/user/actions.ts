@@ -1,10 +1,12 @@
 // core
 import { notification } from "antd";
 import { Dispatch } from "react";
+import { AppState } from "..";
 import axios from "../../axios/axios";
 import Utils from "../../utils/utls";
 import { ErrorResponse } from "../base/BaseErrorResponse";
 import BaseResponse from "../base/BaseResponse";
+import { Permission } from "../roles/types";
 
 // redux
 import * as CONS from "./constants";
@@ -112,7 +114,38 @@ const addToken = (token: string) => {
 }
 
 
+// get permissions
+export const getPermissions = (cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>, getState: () => AppState) => {
+    dispatch(handleStarted())
+    try {
+      const user = getState().user.user?.role;
+      if(user) {
+        const results = await axios.get<BaseResponse<Permission[]>>(`/permissions/${user._id}`);
+        if (results.data.documents) {
+          dispatch(getPermissionsFinished(results.data.documents))
+        }
+        dispatch(handleFinished())
+      }
+
+      if (cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleUserError(e?.response?.data));
+    }
+  };
+}
+
+const getPermissionsFinished = (data: Permission[]) => {
+  return {
+    type: CONS.GET_PERMISSIONS_FINISHED,
+    data,
+  } as const
+}
+
 
 export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished
-| typeof addToken
+| typeof addToken | typeof getPermissionsFinished
 >

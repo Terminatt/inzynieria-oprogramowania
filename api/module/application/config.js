@@ -56,7 +56,7 @@ Router.get("/permissions/types", (req, res, next) => requireAuth(req, res, next,
     Controller.getPermissionTypes(req, res, next);
 })
 
-Router.get("/permissions/:roleId", (req, res, next) => requireAuth(req, res, next, "Role", "DISPLAY"), (req, res, next) => {
+Router.get("/permissions/:roleId", (req, res, next) => requireAuth(req, res, next, "Role",), (req, res, next) => {
     const Controller = new AclController();
     Controller.getList(req, res, next);
 })

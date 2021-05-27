@@ -26,7 +26,7 @@ module.exports = async (req, res, next, entity, action) => {
           loggedUser._id = loggedUser._id.toString();
           req.loggedUser = loggedUser;
         }
-        if (!loggedUser.role.superAdmin) {
+        if (!loggedUser.role.superAdmin && action) {
           const acl = await mongoose.model("Acl", aclSchema).findOne({
             entityName: entity,
             role: loggedUser.role._id

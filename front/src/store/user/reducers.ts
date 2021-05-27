@@ -7,6 +7,7 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
   token: null,
+  permissions: []
 }
 
 

@@ -1,11 +1,13 @@
 import { BaseEntity } from "../base/BaseEntity";
 import { ErrorResponse } from "../base/BaseErrorResponse";
+import { Permission } from "../roles/types";
 
 export interface UserState {
   user?: User
   isLoading: boolean;
   error?: ErrorResponse | null;
   token: string | null;
+  permissions: Permission[]
 }
 
 export interface User extends BaseEntity {
