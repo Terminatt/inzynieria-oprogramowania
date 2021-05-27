@@ -170,11 +170,11 @@ export const addEbookFinished = (data: Ebook) => {
   } as const
 }
 
-export const addUserEbook = (id: Id, ebook: Ebook, cb?: () => void) => {
+export const addUserEbook = (id: Id, cb?: () => void) => {
   return async (dispatch: Dispatch<EbookActions>) => {
     dispatch(handleEbookStarted());
     try {
-      const results = await axios.post<BaseResponse<UserEbook>>("/user/library", {ebookId: id, ebook,});
+      const results = await axios.post<BaseResponse<UserEbook>>("/user/library", {ebookId: id});
 
       if(results.data.documents) {
           dispatch(addUserEbookFinished(results.data.documents))

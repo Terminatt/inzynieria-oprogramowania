@@ -10,6 +10,40 @@ class LibraryModel extends BaseModel {
         this.setDocumentClass("Library");
     }
 
+
+    async getList(params, filter = {}) {
+        try {
+            params = Object.assign({}, params);
+            params = this.parseRequestParams(params);
+            if (!_.isEmpty(filter)) {
+                params.unshift({ $match: filter });
+            }
+            let results = await this.getModel(this.getDocumentClass()).populate("Ebook").aggregate(params);
+            let total = _.get(results, '[0].total', 0);
+            results = _.get(results, '[0].results', []);;
+
+            return { documents: results, total };
+        } catch (err) {
+            throw new AppError(err.message);
+        }
+    }
+
+    async get(id, filter = {}) {
+        try {
+            if (!this.isValidObjectId(id)) {
+                throw new AppError('Nieprawidłowe id dokumentu', 422);
+            }
+            let result = await this.getModel(this.getDocumentClass()).findOne({ _id: id, ...filter }).populate("Ebook").lean();
+            if (result) {
+                return result;
+            } else {
+                throw new AppError('Nie znaleziono dokumentu', 404);
+            }
+        } catch (err) {
+            throw new AppError(err.message, err.status);
+        }
+    }
+
     async setAllData(data, document) {
         try {
             this.setAllowedData(data, document);

@@ -58,7 +58,7 @@ function Ebooks() {
 
   const onAddToLibrary = (data?: Ebook) => {
     if (data) {
-      dispatch(addUserEbook(data._id, data))
+      dispatch(addUserEbook(data._id))
     }
   }
 
