@@ -4,7 +4,7 @@ import { Id } from "../base/BaseEntity";
 import { ErrorResponse } from "../base/BaseErrorResponse";
 import BaseResponse from "../base/BaseResponse";
 import * as CONS from "./constants";
-import { Ebook, EbookPayload } from "./types";
+import { Ebook, EbookPayload, UserEbook } from "./types";
 
 // handle loading
 const handleEbookStarted = () => {
@@ -59,7 +59,7 @@ export const getEbooksUsersCollection = (cb?: () => void) => {
   return async (dispatch: Dispatch<EbookActions>) => {
     dispatch(handleEbookStarted());
     try {
-      const results = await axios.get<BaseResponse<Ebook[]>>("user/library");
+      const results = await axios.get<BaseResponse<UserEbook[]>>("user/library");
 
       if(results.data.documents) {
           dispatch(getEbookUserCollectionFinished(results.data.documents))
@@ -76,7 +76,7 @@ export const getEbooksUsersCollection = (cb?: () => void) => {
   };
 }
 
-export const getEbookUserCollectionFinished = (data: Ebook[]) => {
+export const getEbookUserCollectionFinished = (data: UserEbook[]) => {
   return {
     type: CONS.GET_USER_EBOOKS,
     data,
@@ -116,7 +116,7 @@ export const getUserEbook = (id: Id, cb?: () => void) => {
   return async (dispatch: Dispatch<EbookActions>) => {
     dispatch(handleEbookStarted());
     try {
-      const results = await axios.get<BaseResponse<Ebook>>(`/user/library/${id}`);
+      const results = await axios.get<BaseResponse<UserEbook>>(`/user/library/${id}`);
 
       if(results.data.documents) {
           dispatch(getUserEbookFinished(results.data.documents))
@@ -134,7 +134,7 @@ export const getUserEbook = (id: Id, cb?: () => void) => {
 }
 
 
-export const getUserEbookFinished = (data: Ebook) => {
+export const getUserEbookFinished = (data: UserEbook) => {
   return {
     type: CONS.GET_USER_EBOOK,
     data,
@@ -170,14 +170,14 @@ export const addEbookFinished = (data: Ebook) => {
   } as const
 }
 
-export const addUserEbook = (id: Id, cb?: () => void) => {
+export const addUserEbook = (id: Id, ebook: Ebook, cb?: () => void) => {
   return async (dispatch: Dispatch<EbookActions>) => {
     dispatch(handleEbookStarted());
     try {
-      const results = await axios.post<BaseResponse<Ebook>>("/user/library", {ebookId: id});
+      const results = await axios.post<BaseResponse<UserEbook>>("/user/library", {ebookId: id, ebook,});
 
       if(results.data.documents) {
-          dispatch(addEbookFinished(results.data.documents))
+          dispatch(addUserEbookFinished(results.data.documents))
       }
 
       dispatch(handleEbookFinished());
@@ -191,7 +191,7 @@ export const addUserEbook = (id: Id, cb?: () => void) => {
   };
 }
 
-export const addUserFinished = (data: Ebook) => {
+export const addUserEbookFinished = (data: UserEbook) => {
   return {
     type: CONS.ADD_USER_EBOOK,
     data,
@@ -242,6 +242,21 @@ export const deleteEbook = (id: Id, cb?: () => void) => {
   };
 }
 
+export const deleteUserEbook = (id: Id, cb?: () => void) => {
+  return async (dispatch: Dispatch<EbookActions>) => {
+    dispatch(handleEbookStarted());
+    try {
+      await axios.delete<BaseResponse<Ebook>>(`/user/library/${id}`);
+      dispatch(handleEbookFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleEbookError());
+    }
+  };
+}
 
 export const selectEbook = (data: Ebook | null) => {
   return {
@@ -259,5 +274,5 @@ export const selectUserEbook = (data: Ebook | null) => {
 
 export type EbookActions = ReturnType<typeof handleEbookStarted | typeof handleEbookFinished | typeof handleEbookError | 
 typeof getEbookCollectionFinished | typeof getEbookFinished | typeof addEbookFinished | typeof editEbookFinished | typeof selectEbook 
-| typeof getEbookUserCollectionFinished | typeof getUserEbookFinished | typeof selectUserEbook
+| typeof getEbookUserCollectionFinished | typeof getUserEbookFinished | typeof selectUserEbook | typeof addUserEbookFinished 
 >;

@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 // redux
 import { openModal } from '../../../store/modals/actions';
 import { ModalType } from '../../../store/modals/types';
-import { deleteEbook, getEbooksCollection, selectEbook } from '../../../store/ebooks/actions';
+import { addUserEbook, deleteEbook, getEbooksCollection, selectEbook } from '../../../store/ebooks/actions';
 import { getCategoryCollection } from '../../../store/category/actions';
 import { AppState } from '../../../store';
 
 
 // antd
-import { Col, Row } from 'antd';
+import { Col, notification, Row } from 'antd';
 
 // custom
 import EbookCard from './ebooks-card/ebooks-card';
@@ -21,6 +21,8 @@ import EbooksModal from '../../../components/modals/ebook-modal/ebook-modal';
 import "./ebooks.less";
 import { Ebook } from '../../../store/ebooks/types';
 import Loading from '../../../components/loading/loading';
+import { Id } from '../../../store/base/BaseEntity';
+import axios from '../../../axios/axios';
 
 
 function Ebooks() {
@@ -53,6 +55,22 @@ function Ebooks() {
       }));
     }
   }
+
+  const onAddToLibrary = (data?: Ebook) => {
+    if (data) {
+      dispatch(addUserEbook(data._id, data))
+    }
+  }
+
+  const handleUpload = async (id: Id, formData: FormData) => {
+    try {
+      await axios.put(`/ebook/ebook/${id}`, formData);
+      dispatch(getEbooksCollection());
+
+    } catch (e) {
+      notification.error({ message: "The upload failed" })
+    }
+  }
   return (
     <Row className="scroll-container">
       <Loading isLoading={isLoading} />
@@ -63,7 +81,7 @@ function Ebooks() {
           </Col>
           {collection.map((el) => (
             <Col key={el._id} className="item-card" xs={6}>
-              <EbookCard onDelete={onDelete} onEditClick={onEditClick} data={el} />
+              <EbookCard handleUpload={handleUpload} addToLibrary={onAddToLibrary} onDelete={onDelete} onEditClick={onEditClick} data={el} />
             </Col>
           ))}
         </Row>

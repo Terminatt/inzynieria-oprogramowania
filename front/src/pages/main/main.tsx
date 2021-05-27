@@ -9,6 +9,7 @@ import { Col, Row } from 'antd';
 import Categories from './category/categories';
 
 // custom
+import MyEbooks from './ebooks/my-ebooks/my-ebooks';
 import Dashboard from './dashboard/dashboard';
 import Sidebar from './sidebar/sidebar';
 import Ebooks from './ebooks/ebooks';
@@ -36,6 +37,9 @@ function Main() {
           </Route>
           <Route path="/main/ebook">
             <Ebooks />
+          </Route>
+          <Route path="/main/my-ebook">
+            <MyEbooks />
           </Route>
           <Route path="/main/category">
             <Categories />

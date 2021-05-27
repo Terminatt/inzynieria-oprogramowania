@@ -20,7 +20,7 @@ function Sidebar() {
   return (
     <Sider className="sidebar">
       <Row>
-        <Menu defaultOpenKeys={['user', 'admin']} mode="inline" selectedKeys={[pathname]} className="sidebar__menu" theme="dark">
+        <Menu defaultOpenKeys={['main', 'user', 'admin']} mode="inline" selectedKeys={[pathname]} className="sidebar__menu" theme="dark">
           {userState.user?.role.superAdmin ? (
             <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="main" title="Ogólne">
               <Menu.Item key="/main" icon={<HomeOutlined />}>
@@ -43,7 +43,7 @@ function Sidebar() {
           {userState.user?.role.superAdmin ? (
             <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="user" title="Twoja strefa">
               <Menu.Item key="/main/my-ebook" icon={<BookOutlined />}>
-                <Link to="/main/ebook">
+                <Link to="/main/my-ebook">
                   Moje Ebooki
               </Link>
               </Menu.Item>

@@ -2,7 +2,7 @@
 import React from 'react';
 
 // antd
-import { Card, notification, Popconfirm, Upload } from 'antd';
+import { Card, Popconfirm, Tooltip, Upload } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { EditOutlined, PlusCircleOutlined, DeleteOutlined, UploadOutlined, BookOutlined } from '@ant-design/icons';
 
@@ -12,26 +12,28 @@ import { Ebook } from '../../../../store/ebooks/types';
 // css
 import "./ebooks-card.less";
 import { RcFile } from 'antd/lib/upload';
-import axios from '../../../../axios/axios';
-import { getEbooksCollection } from '../../../../store/ebooks/actions';
-import { useDispatch } from 'react-redux';
+import { Id } from '../../../../store/base/BaseEntity';
 
 
 interface ComponentProps {
   addCard?: boolean;
   className?: string;
-
+  myEbook?: boolean;
   data?: Ebook;
+
+  file?: string;
 
   onClick?: () => void;
   onEditClick?: (data?: Ebook) => void;
   onDelete?: (data?: Ebook) => void;
 
+  addToLibrary?: (data?: Ebook) => void;
+  handleUpload?: (id: Id, formData: FormData, data?: Ebook) => void;
+
 }
 
 function EbookCard(props: ComponentProps) {
-  const { addCard } = props;
-  const dispatch = useDispatch();
+  const { addCard, myEbook } = props;
 
   const onEditClick = () => {
     if (props.onEditClick) {
@@ -53,22 +55,44 @@ function EbookCard(props: ComponentProps) {
     }
   }
 
+  const onAddToLibrary = () => {
+    if (props.addToLibrary) {
+      props.addToLibrary(props.data);
+    }
+  }
+
 
   const handleUpload = async (file: RcFile, fileType: "file" | "coverImage") => {
     const formData = new FormData();
     formData.append(fileType, file);
 
-    try {
-      await axios.put(`/ebook/ebook/${props.data?._id}`, formData);
-      dispatch(getEbooksCollection());
-
-    } catch (e) {
-      notification.error({ message: "The upload failed" })
+    if (props.handleUpload && props.data) {
+      props.handleUpload(props.data._id, formData, props.data)
     }
 
     return false;
   };
 
+  const renderActions = () => {
+    if (addCard) {
+      return [];
+    } else if (myEbook) {
+      return [
+        <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "file")}><UploadOutlined></UploadOutlined></Upload>,
+        <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip>
+      ]
+    } else {
+      return [
+        <Tooltip overlay="Edytuj"><EditOutlined onClick={onEditClick} key="edit" /></Tooltip>,
+        <Tooltip overlay="Dodaj do swojej biblioteczki"><PlusCircleOutlined onClick={onAddToLibrary} key="add" /></Tooltip>,
+        <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip>
+      ]
+    }
+  }
+
+  const getBaseUrl = () => {
+    return process.env.REACT_APP_PROXY_API || 'http://localhost:3001/';
+  }
 
 
 
@@ -81,12 +105,7 @@ function EbookCard(props: ComponentProps) {
         </Upload>
 
       )}
-      actions={addCard ? [] : [
-        <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "file")}><UploadOutlined></UploadOutlined></Upload>,
-        <EditOutlined onClick={onEditClick} key="edit" />,
-        <Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm>
-      ]
-      }
+      actions={renderActions()}
     >
       {addCard ? (
         <div className="card__add">
@@ -99,8 +118,8 @@ function EbookCard(props: ComponentProps) {
             <div>{props.data?.author}</div>
             <div>Ilość stron: {props.data?.numberOfPages}</div>
             <div>Wydawca: {props.data?.publisher}</div>
-            {props.data?.file ? (
-              <div className="card__link"><a href={props.data?.file}><BookOutlined />  Ebook</a></div>
+            {props.file ? (
+              <div className="card__link"><a target="_blank" rel="noreferrer" href={getBaseUrl() + 'media/' + props.file}><BookOutlined />  Ebook</a></div>
             ) : null}
           </>}
         />

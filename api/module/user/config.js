@@ -28,6 +28,11 @@ Router.put("/library/:id", (req, res, next) => requireAuth(req, res, next, "Libr
     Controller.update(req, res, next);
 });
 
+Router.delete("/library/:id", (req, res, next) => requireAuth(req, res, next, "Library", "DELETE"), cpUpload, (req, res, next) => {
+    const Controller = new LibraryController(req);
+    Controller.delete(req, res, next);
+});
+
 //Użytkownicy
 Router.get("/user", (req, res, next) => requireAuth(req, res, next, "User", "DISPLAY"), (req, res, next) => {
     const Controller = new UserController(req);

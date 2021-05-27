@@ -49,7 +49,6 @@ export default function ebookskReducer(state = initialState, action: EbookAction
         ...state,
         userCollection: action.data
       }
-    case CONS.GET_USER_EBOOK:
     case CONS.SELECT_USER_EBOOK:
       return {
         ...state,

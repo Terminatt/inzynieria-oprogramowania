@@ -4,11 +4,18 @@ import { Category } from "../category/types";
 
 export interface EbooksState {
   collection: Ebook[];
-  userCollection: Ebook[];
+  userCollection: UserEbook[];
   userSelected: Ebook | null;
   selected: Ebook | null;
   isLoading: boolean;
   error?: ErrorResponse | null;
+}
+
+export interface UserEbook {
+  _id: Id,
+  ebookId: Id,
+  ebook: Ebook,
+  file: string,
 }
 
 export interface Ebook {
