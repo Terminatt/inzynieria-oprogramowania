@@ -16,31 +16,50 @@ function Sidebar() {
   const { pathname } = useLocation();
 
   const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const category = permissions.find((el) => el.entityName === 'Category');
+  const ebook = permissions.find((el) => el.entityName === 'Ebook');
+  const library = permissions.find((el) => el.entityName === 'Library');
+  const roles = permissions.find((el) => el.entityName === 'Role');
+  const user = permissions.find((el) => el.entityName === 'User');
+
+  const displayCategories = !!category?.permissions.includes('DISPLAY');
+  const displayEbooks = !!ebook?.permissions.includes('DISPLAY');
+  const displayLibrary = !!library?.permissions.includes('DISPLAY');
+  const displayRoles = !!roles?.permissions.includes('DISPLAY');
+  const displayUser = !!user?.permissions.includes('DISPLAY');
 
   return (
     <Sider className="sidebar">
       <Row>
         <Menu defaultOpenKeys={['main', 'user', 'admin']} mode="inline" selectedKeys={[pathname]} className="sidebar__menu" theme="dark">
-          {userState.user?.role.superAdmin ? (
+          {userState.user?.role.superAdmin || displayCategories || displayEbooks ? (
             <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="main" title="Ogólne">
               <Menu.Item key="/main" icon={<HomeOutlined />}>
                 <Link to="/main">
                   Dashboard
               </Link>
               </Menu.Item>
-              <Menu.Item key="/main/category" icon={<PaperClipOutlined />}>
-                <Link to="/main/category">
-                  Kategorie
+              {userState.user?.role.superAdmin || displayCategories ? (
+                <Menu.Item key="/main/category" icon={<PaperClipOutlined />}>
+                  <Link to="/main/category">
+                    Kategorie
               </Link>
-              </Menu.Item>
-              <Menu.Item key="/main/ebook" icon={<BookOutlined />}>
-                <Link to="/main/ebook">
-                  Ebooki
+                </Menu.Item>
+
+              ) : null}
+              {userState.user?.role.superAdmin || displayEbooks ? (
+                <Menu.Item key="/main/ebook" icon={<BookOutlined />}>
+                  <Link to="/main/ebook">
+                    Ebooki
               </Link>
-              </Menu.Item>
+                </Menu.Item>
+
+              ) : null}
             </Menu.SubMenu>
           ) : null}
-          {userState.user?.role.superAdmin ? (
+          {userState.user?.role.superAdmin || displayLibrary ? (
             <Menu.SubMenu icon={<ContainerOutlined />} className="sidebar__submenu" key="user" title="Twoja strefa">
               <Menu.Item key="/main/my-ebook" icon={<BookOutlined />}>
                 <Link to="/main/my-ebook">
@@ -49,18 +68,24 @@ function Sidebar() {
               </Menu.Item>
             </Menu.SubMenu>
           ) : null}
-          {userState.user?.role.superAdmin ? (
+          {userState.user?.role.superAdmin || displayRoles || displayUser ? (
             <Menu.SubMenu icon={<TeamOutlined />} className="sidebar__submenu" key="admin" title="Administracja">
-              <Menu.Item key="/main/roles" icon={<OneToOneOutlined />}>
-                <Link to="/main/roles">
-                  Role
+              {userState.user?.role.superAdmin || displayRoles ? (
+                <Menu.Item key="/main/roles" icon={<OneToOneOutlined />}>
+                  <Link to="/main/roles">
+                    Role
               </Link>
-              </Menu.Item>
-              <Menu.Item key="/main/users" icon={<UserOutlined />}>
-                <Link to="/main/users">
-                  Użytkownicy
+                </Menu.Item>
+
+              ) : null}
+
+              {userState.user?.role.superAdmin || displayUser ? (
+                <Menu.Item key="/main/users" icon={<UserOutlined />}>
+                  <Link to="/main/users">
+                    Użytkownicy
               </Link>
-              </Menu.Item>
+                </Menu.Item>
+              ) : null}
             </Menu.SubMenu>
           ) : null}
         </Menu>

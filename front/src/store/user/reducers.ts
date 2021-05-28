@@ -7,7 +7,9 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
   token: null,
-  permissions: []
+  permissions: [],
+  userCollection: [],
+  selectedUser: null,
 }
 
 
@@ -38,6 +40,21 @@ export default function userReducer(state = initialState, action: UserActions): 
       return {
         ...state,
         token: action.token,
+      }
+    case CONS.GET_USERS_FINISHED:
+      return {
+        ...state,
+        userCollection: action.data
+      }
+    case CONS.GET_USER_FINSIHED:
+      return {
+        ...state,
+        selectedUser: action.data
+      }
+    case CONS.GET_PERMISSIONS_FINISHED:
+      return {
+        ...state,
+        permissions: action.data
       }
     default:
       return state

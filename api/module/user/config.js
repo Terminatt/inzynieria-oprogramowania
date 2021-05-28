@@ -54,4 +54,9 @@ Router.put("/user/:id", (req, res, next) => requireAuth(req, res, next, "User", 
     Controller.update(req, res, next);
 });
 
+Router.delete("/user/:id", (req, res, next) => requireAuth(req, res, next, "User", "DELETE"), (req, res, next) => {
+    const Controller = new UserController(req);
+    Controller.delete(req, res, next);
+});
+
 module.exports = Router;

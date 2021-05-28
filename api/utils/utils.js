@@ -5,8 +5,8 @@ const userSchema = require("../module/application/schema/user");
 
 const initRoles =  async () => {
   try {
-    const adminRole = await mongoose.model('Role', roleSchema).findOne({ name: 'Super Admin' });
-    const userRole = await mongoose.model('Role').findOne({name: 'User'});
+    let adminRole = await mongoose.model('Role', roleSchema).findOne({ name: 'Super Admin' });
+    let userRole = await mongoose.model('Role').findOne({name: 'User'});
     
     if(!adminRole) {
       adminRole = await mongoose.model('Role').create({

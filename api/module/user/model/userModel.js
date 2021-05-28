@@ -9,9 +9,25 @@ class UserModel extends BaseModel {
         this.setDocumentClass("User");
     }
 
+    async getPopulatedList(params, filter = {}) {
+        try {
+            params = Object.assign({}, params);
+            params = this.parseRequestParams(params);
+            if (!_.isEmpty(filter)) {
+                params.unshift({ $match: filter });
+            }
+            let results = await this.getModel(this.getDocumentClass()).find({}).populate('role');
+            let total = await this.getModel(this.getDocumentClass()).find({}).count();
+            
+            return { documents: results, total };
+        } catch (err) {
+            throw new AppError(err.message);
+        }
+    }
+
     async getList(params) {
         try {
-            let result = await super.getList(params);
+            let result = await this.getPopulatedList(params);
             result.documents = result.documents.map((user) => {
                 delete user.password;
                 return user;

@@ -4,6 +4,7 @@ import { Dispatch } from "react";
 import { AppState } from "..";
 import axios from "../../axios/axios";
 import Utils from "../../utils/utls";
+import { Id } from "../base/BaseEntity";
 import { ErrorResponse } from "../base/BaseErrorResponse";
 import BaseResponse from "../base/BaseResponse";
 import { Permission } from "../roles/types";
@@ -145,7 +146,124 @@ const getPermissionsFinished = (data: Permission[]) => {
   } as const
 }
 
+export const getUsersCollection = (cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>) => {
+    dispatch(handleStarted());
+    try {
+      const results = await axios.get<BaseResponse<User[]>>("/user/user");
+
+      if(results.data.documents) {
+          dispatch(getUsersCollectionFinished(results.data.documents))
+      }
+
+      dispatch(handleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleUserError());
+    }
+  };
+}
+
+const getUsersCollectionFinished = (data: User[]) => {
+  return {
+    type: CONS.GET_USERS_FINISHED,
+    data,
+  } as const
+}
+
+export const getUser = (id: Id, cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>) => {
+    dispatch(handleStarted());
+    try {
+      const results = await axios.get<BaseResponse<User>>(`/user/user/${id}`);
+
+      if(results.data.documents) {
+          dispatch(getUserFinished(results.data.documents))
+      }
+
+      dispatch(handleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleUserError());
+    }
+  };
+}
+
+const getUserFinished = (data: User) => {
+  return {
+    type: CONS.GET_USER_FINSIHED,
+    data,
+  } as const
+}
+
+export const updateRole = (id: Id, roleId: Id,  payload: User, cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>) => {
+    dispatch(handleStarted());
+    try {
+      const payloadCopy = {
+        ...payload,
+        role: roleId
+      }
+
+      const results = await axios.put<BaseResponse<User[]>>(`/user/user/${id}`, payloadCopy);
+
+      if(results.data.documents) {
+          dispatch(updateUserFinished(results.data.documents))
+      }
+
+      dispatch(handleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleUserError());
+    }
+  };
+}
+
+const updateUserFinished = (data: User[]) => {
+  return {
+    type: CONS.UPDATE_USER_FINISHED,
+    data,
+  } as const
+}
+
+export const deleteRole = (id: Id, cb?: () => void) => {
+  return async (dispatch: Dispatch<UserActions>) => {
+    dispatch(handleStarted());
+    try {
+      const results = await axios.delete<BaseResponse<User[]>>(`/user/user/${id}`);
+
+      if(results.data.documents) {
+          dispatch(deleteUserFinished(results.data.documents))
+      }
+
+      dispatch(handleFinished());
+      if(cb) {
+        cb();
+      }
+    }
+    catch (e: any) {
+      dispatch(handleUserError());
+    }
+  };
+}
+
+const deleteUserFinished = (data: User[]) => {
+  return {
+    type: CONS.DELETE_USER_FINISHED,
+    data,
+  } as const
+}
+
 
 export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished
-| typeof addToken | typeof getPermissionsFinished
+| typeof addToken | typeof getPermissionsFinished | typeof getUsersCollectionFinished | typeof getUserFinished | typeof updateUserFinished | typeof deleteUserFinished
 >
