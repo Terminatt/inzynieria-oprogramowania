@@ -29,6 +29,12 @@ function MyEbooks() {
   const ebooks = useSelector((state: AppState) => state.ebooks);
   const { userCollection, isLoading } = ebooks;
 
+  const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const ebook = permissions.find((el) => el.entityName === 'Ebook');
+  const library = permissions.find((el) => el.entityName === 'Library');
+
   useEffect(() => {
     dispatch(getCategoryCollection());
     dispatch(getEbooksUsersCollection());
@@ -61,7 +67,7 @@ function MyEbooks() {
         <Row className="ebooks__cards">
           {userCollection.map((el) => (
             <Col key={el._id} className="item-card" xs={6}>
-              <EbookCard file={el.file} myEbook handleUpload={handleUpload} onDelete={onDelete} data={el.ebook} />
+              <EbookCard isAdmin={userState.user?.role.superAdmin} libraryPermission={library} permission={ebook} file={el.file} myEbook handleUpload={handleUpload} onDelete={onDelete} data={el.ebook} />
             </Col>
           ))}
         </Row>

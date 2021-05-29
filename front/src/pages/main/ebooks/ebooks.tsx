@@ -31,6 +31,12 @@ function Ebooks() {
   const ebooks = useSelector((state: AppState) => state.ebooks);
   const { collection, isLoading } = ebooks;
 
+  const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const ebook = permissions.find((el) => el.entityName === 'Ebook');
+  const library = permissions.find((el) => el.entityName === 'Library');
+
   useEffect(() => {
     dispatch(getCategoryCollection());
     dispatch(getEbooksCollection());
@@ -76,12 +82,14 @@ function Ebooks() {
       <Loading isLoading={isLoading} />
       <Row className="ebooks">
         <Row className="ebooks__cards">
-          <Col className="item-card" xs={6}>
-            <EbookCard onClick={onClick} addCard />
-          </Col>
+          {userState.user?.role.superAdmin || ebook?.permissions.includes("CREATE") ? (
+            <Col className="item-card" xs={6}>
+              <EbookCard onClick={onClick} addCard />
+            </Col>
+          ) : null}
           {collection.map((el) => (
             <Col key={el._id} className="item-card" xs={6}>
-              <EbookCard handleUpload={handleUpload} addToLibrary={onAddToLibrary} onDelete={onDelete} onEditClick={onEditClick} data={el} />
+              <EbookCard libraryPermission={library} isAdmin={userState.user?.role.superAdmin} permission={ebook} handleUpload={handleUpload} addToLibrary={onAddToLibrary} onDelete={onDelete} onEditClick={onEditClick} data={el} />
             </Col>
           ))}
         </Row>

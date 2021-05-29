@@ -30,6 +30,12 @@ function Dashboard() {
   const ebooks = useSelector((state: AppState) => state.ebooks);
   const { collection, isLoading } = ebooks;
 
+  const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const ebook = permissions.find((el) => el.entityName === 'Ebook');
+  const library = permissions.find((el) => el.entityName === 'Library');
+
   const [dict, setDict] = useState<EbookDict>({});
   const [parsingLoading, setParsingLoading] = useState<boolean>(false);
 
@@ -95,7 +101,7 @@ function Dashboard() {
   const renderEbooks = (ebooks: Ebook[]) => {
     return ebooks.map((el) => (
       <Col key={el._id} className="item-card" xs={6}>
-        <EbookCard onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
+        <EbookCard isAdmin={userState.user?.role.superAdmin} libraryPermission={library} permission={ebook} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
       </Col>
     ))
   }

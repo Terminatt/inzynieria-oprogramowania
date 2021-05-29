@@ -41,7 +41,7 @@ function Sidebar() {
                   Dashboard
               </Link>
               </Menu.Item>
-              {userState.user?.role.superAdmin || displayCategories ? (
+              {userState.user?.role.superAdmin || (displayCategories && displayEbooks) ? (
                 <Menu.Item key="/main/category" icon={<PaperClipOutlined />}>
                   <Link to="/main/category">
                     Kategorie
@@ -49,7 +49,7 @@ function Sidebar() {
                 </Menu.Item>
 
               ) : null}
-              {userState.user?.role.superAdmin || displayEbooks ? (
+              {userState.user?.role.superAdmin || (displayCategories && displayEbooks) ? (
                 <Menu.Item key="/main/ebook" icon={<BookOutlined />}>
                   <Link to="/main/ebook">
                     Ebooki

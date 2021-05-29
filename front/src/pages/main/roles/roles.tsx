@@ -107,12 +107,22 @@ function Roles() {
   const checkIfChecked = (entity: string, perm: string) => {
     const entityPerms = permissionsCollection.find((el) => el.entityName === entity);
 
+
     if (!entityPerms) {
       return false;
     }
 
     return entityPerms.permissions.includes(perm);
   }
+
+  useEffect(() => {
+    const permissionsCopy = Utils.deepClone(permissions);
+    permissionsCollection.forEach((el) => {
+      permissionsCopy[el.entityName] = el.permissions;
+    })
+    setPermissions(permissionsCopy)
+  }, [permissionsCollection])
+
 
   const renderPermissions = () => {
     const permissionRows: React.ReactNode[] = [];

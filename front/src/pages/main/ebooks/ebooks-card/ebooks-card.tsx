@@ -13,6 +13,7 @@ import { Ebook } from '../../../../store/ebooks/types';
 import "./ebooks-card.less";
 import { RcFile } from 'antd/lib/upload';
 import { Id } from '../../../../store/base/BaseEntity';
+import { Permission } from '../../../../store/roles/types';
 
 
 interface ComponentProps {
@@ -20,7 +21,9 @@ interface ComponentProps {
   className?: string;
   myEbook?: boolean;
   data?: Ebook;
-
+  permission?: Permission;
+  libraryPermission?: Permission;
+  isAdmin?: boolean;
   file?: string;
 
   onClick?: () => void;
@@ -78,14 +81,14 @@ function EbookCard(props: ComponentProps) {
       return [];
     } else if (myEbook) {
       return [
-        <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "file")}><UploadOutlined></UploadOutlined></Upload>,
-        <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip>
+        props.isAdmin || props.libraryPermission?.permissions.includes("EDIT") ? <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "file")}><UploadOutlined ></UploadOutlined></Upload> : null,
+        props.isAdmin || props.libraryPermission?.permissions.includes("DELETE") ? <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz odpiąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip> : null
       ]
     } else {
       return [
-        <Tooltip overlay="Edytuj"><EditOutlined onClick={onEditClick} key="edit" /></Tooltip>,
-        <Tooltip overlay="Dodaj do swojej biblioteczki"><PlusCircleOutlined onClick={onAddToLibrary} key="add" /></Tooltip>,
-        <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip>
+        props.isAdmin || props.permission?.permissions.includes("EDIT") ? <Tooltip overlay="Edytuj"><EditOutlined onClick={onEditClick} key="edit" /></Tooltip> : null,
+        props.isAdmin || props.libraryPermission?.permissions.includes("DISPLAY") ? <Tooltip overlay="Dodaj do swojej biblioteczki"><PlusCircleOutlined onClick={onAddToLibrary} key="add" /></Tooltip> : null,
+        props.isAdmin || props.permission?.permissions.includes("DELETE") ? <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip> : null
       ]
     }
   }
@@ -100,9 +103,13 @@ function EbookCard(props: ComponentProps) {
     <Card className={["card", addCard ? "add" : "", props.className ? props.className : ""].join(" ")}
       onClick={onClick}
       cover={addCard ? null : (
-        <Upload fileList={[]} beforeUpload={!myEbook ? (file) => handleUpload(file, "coverImage") : undefined}>
-          <img className="card__cover" alt="ebook cover" src={props.data?.coverImage ? getBaseUrl() + 'media/' + props.data.coverImage : "https://bibliotekant.pl/wp-content/uploads/2021/04/placeholder-image.png"} />
-        </Upload>
+        props.isAdmin || props.permission?.permissions.includes("EDIT") ? (
+          <Upload fileList={[]} beforeUpload={!myEbook ? (file) => handleUpload(file, "coverImage") : undefined}>
+            <img className="card__cover" alt="ebook cover" src={props.data?.coverImage ? getBaseUrl() + 'media/' + props.data.coverImage : "https://bibliotekant.pl/wp-content/uploads/2021/04/placeholder-image.png"} />
+          </Upload>
+        ) : (
+          <img className="card__cover" alt="ebook cover" src={props.data?.coverImage ? getBaseUrl() + 'media/' + props.data?.coverImage : "https://bibliotekant.pl/wp-content/uploads/2021/04/placeholder-image.png"} />
+        )
 
       )}
       actions={renderActions()}

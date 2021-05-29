@@ -9,8 +9,8 @@ import { Role, User } from '../../../store/user/types';
 import { getRolesCollection } from '../../../store/roles/actions';
 
 // antd
-import { Button, Col, Row, Select, SelectProps, Table } from 'antd';
-import { SaveOutlined, BoldOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Select, Table } from 'antd';
+import { BoldOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // custom
 import Loading from '../../../components/loading/loading';

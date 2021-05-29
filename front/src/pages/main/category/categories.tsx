@@ -28,6 +28,11 @@ function Categories() {
 
   const { collection, isLoading } = categories;
 
+  const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const category = permissions.find((el) => el.entityName === 'Category');
+
   const onClickAdd = () => {
     dispatch(selectCategory(null));
     dispatch(openModal(ModalType.ADD_CATEGORY));
@@ -57,12 +62,14 @@ function Categories() {
       <Loading isLoading={isLoading} />
       <Row className="categories">
         <Row className="categories__cards">
-          <Col className="item-card" xs={6}>
-            <CategoriesCard onClick={onClickAdd} addCard />
-          </Col>
+          {category?.permissions.includes("CREATE") ? (
+            <Col className="item-card" xs={6}>
+              <CategoriesCard onClick={onClickAdd} addCard />
+            </Col>
+          ) : null}
           {collection.map((el) => (
             <Col key={el._id} className="item-card" xs={6}>
-              <CategoriesCard onDelete={onDelete} onEditClick={onEditClick} data={el} />
+              <CategoriesCard isAdmin={userState.user?.role.superAdmin} permission={category} onDelete={onDelete} onEditClick={onEditClick} data={el} />
             </Col>
           ))}
         </Row>
