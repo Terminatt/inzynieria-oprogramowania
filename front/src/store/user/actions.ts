@@ -235,7 +235,7 @@ const updateUserFinished = (data: User[]) => {
   } as const
 }
 
-export const deleteRole = (id: Id, cb?: () => void) => {
+export const deleteUser = (id: Id, cb?: () => void) => {
   return async (dispatch: Dispatch<UserActions>) => {
     dispatch(handleStarted());
     try {
