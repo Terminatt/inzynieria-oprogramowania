@@ -62,7 +62,7 @@ function Categories() {
       <Loading isLoading={isLoading} />
       <Row className="categories">
         <Row className="categories__cards">
-          {category?.permissions.includes("CREATE") ? (
+          {userState.user?.role.superAdmin || category?.permissions.includes("CREATE") ? (
             <Col className="item-card" xs={6}>
               <CategoriesCard onClick={onClickAdd} addCard />
             </Col>
