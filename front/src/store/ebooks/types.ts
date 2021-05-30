@@ -29,6 +29,9 @@ export interface Ebook {
   coverImage?: string;
   file?: string;
   categories: Pick<Category, "_id" | "name">[];
+  nrOfRatings?: number;
+  averageRating?: number | null;
+
 
 }
 

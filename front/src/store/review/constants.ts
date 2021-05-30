@@ -1,0 +1,13 @@
+// handle started
+export const HANDLE_REVIEW_STARTED = "HANDLE_REVIEW_STARTED";
+export const HANDLE_REVIEW_FINISHED = "HANDLE_REVIEW_FINISHED";
+export const HANDLE_REVIEW_ERROR = "HANDLE_REVIEW_ERROR";
+
+
+export const GET_REVIEWS = "GET_REVIEWS";
+export const GET_REVIEW = "GET_REVIEW";
+export const ADD_REVIEW = "ADD_REVIEW";
+export const EDIT_REVIEW = "EDIT_REVIEW";
+
+export const SELECT_REVIEW = "SELECT_REVIEW";
+

@@ -15,6 +15,7 @@ import Sidebar from './sidebar/sidebar';
 import Ebooks from './ebooks/ebooks';
 import Roles from './roles/roles';
 import Users from './users/users';
+import Review from './review/review';
 
 // css
 import "./main.less";
@@ -34,6 +35,9 @@ function Main() {
           </Route>
           <Route path="/main/users">
             <Users />
+          </Route>
+          <Route path="/main/ebook/:id">
+            <Review />
           </Route>
           <Route path="/main/ebook">
             <Ebooks />

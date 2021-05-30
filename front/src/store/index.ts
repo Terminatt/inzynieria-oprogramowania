@@ -9,13 +9,15 @@ import modalsReducer from "./modals/reducers";
 import categoryReducer from './category/reducers';
 import ebookskReducer from './ebooks/reducers';
 import rolesReducer from './roles/reducers';
+import reviewReducer from './review/reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
   modals: modalsReducer,
   categories: categoryReducer,
   ebooks: ebookskReducer,
-  roles: rolesReducer
+  roles: rolesReducer,
+  reviews: reviewReducer
 })
 
 

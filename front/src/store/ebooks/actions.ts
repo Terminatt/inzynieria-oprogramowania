@@ -89,9 +89,8 @@ export const getEbook = (id: Id, cb?: () => void) => {
     dispatch(handleEbookStarted());
     try {
       const results = await axios.get<BaseResponse<Ebook>>(`/ebook/ebook/${id}`);
-
-      if(results.data.documents) {
-          dispatch(getEbookFinished(results.data.documents))
+      if(results.data.document) {
+          dispatch(getEbookFinished(results.data.document))
       }
 
       dispatch(handleEbookFinished());
