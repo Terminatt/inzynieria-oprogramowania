@@ -10,21 +10,24 @@ class LibraryModel extends BaseModel {
         this.setDocumentClass("Library");
     }
 
-
-    async getList(params, filter = {}) {
+    async getAverageRating(documents) {
         try {
-            params = Object.assign({}, params);
-            params = this.parseRequestParams(params);
-            if (!_.isEmpty(filter)) {
-                params.unshift({ $match: filter });
-            }
-            let results = await this.getModel(this.getDocumentClass()).populate("Ebook").aggregate(params);
-            let total = _.get(results, '[0].total', 0);
-            results = _.get(results, '[0].results', []);;
-
-            return { documents: results, total };
+            await Promise.all(_.castArray(documents).map(async (document) => {
+                let documentRatings = await this.getModel("Review").find({ ebookId: document._id }).lean();
+                if (documentRatings.length > 0) {
+                    let sum = 0;
+                    _.each(documentRatings, (rating) => sum += rating.stars);
+                    document.nrOfRatings = _.size(documentRatings);
+                    document.averageRating = _.round(sum / _.size(documentRatings), 1)
+                } else {
+                    document.nrOfRatings = 0;
+                    document.averageRating = null;
+                }
+                return document;
+            }));
+            return documents;
         } catch (err) {
-            throw new AppError(err.message);
+            throw new AppError(err.message, err.status);
         }
     }
 
@@ -85,6 +88,10 @@ class LibraryModel extends BaseModel {
         try {
             let result = await super.getList(params, { creator: mongoose.Types.ObjectId(this.getLoggedUser()._id) });
             result.documents = await this.joinEbookData(result.documents);
+
+            for (const el of result.documents) {
+                el.ebook = await this.getAverageRating(el.ebook);
+            }
             return result;
         } catch (err) {
             throw new AppError(err.message, err.status);

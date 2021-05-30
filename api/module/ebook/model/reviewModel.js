@@ -22,8 +22,7 @@ class CategoryModel extends BaseModel {
             throw new AppError(err.message, err.status);
         }
     }
-
-
+    
     async setAllData(data, document) {
         try {
             this.setAllowedData(data, document);
