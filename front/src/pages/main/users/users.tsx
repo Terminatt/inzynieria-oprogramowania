@@ -47,6 +47,11 @@ function Users() {
     }));
   }
 
+  const userState = useSelector((state: AppState) => state.user);
+  const { permissions } = userState;
+
+  const user = permissions.find((el) => el.entityName === 'User');
+
   const columns = [
     {
       title: 'Imie',
@@ -88,10 +93,10 @@ function Users() {
       key: 'deletable',
       render: (data: any, row: User) => (
         <Row>
-          <Button icon={<BoldOutlined />} className="user-action btn-warning" size="small">
+          <Button disabled={!userState.user?.role.superAdmin && !user?.permissions.includes("BAN")} icon={<BoldOutlined />} className="user-action btn-warning" size="small">
             Zbanuj
           </Button>
-          <Button type="primary" onClick={() => deleteSelected(row._id)} icon={<DeleteOutlined />} className="user-action btn-delete" disabled={row.role.superAdmin} size="small">
+          <Button type="primary" onClick={() => deleteSelected(row._id)} icon={<DeleteOutlined />} className="user-action btn-delete" disabled={row.role.superAdmin || (!userState.user?.role.superAdmin && !user?.permissions.includes("DELETE"))} size="small">
             Usuń
           </Button>
         </Row>

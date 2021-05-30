@@ -37,6 +37,11 @@ function Roles() {
 
   const [permissions, setPermissions] = useState<{ [key: string]: string[] }>({})
 
+  const userState = useSelector((state: AppState) => state.user);
+  const userPerm = userState.permissions;
+
+  const rolesPerm = userPerm.find((el) => el.entityName === 'Role');
+
   useEffect(() => {
     dispatch(getRolesCollection())
     dispatch(getPermissionTypes())
@@ -135,7 +140,7 @@ function Roles() {
             </Row>
             <Row className="roles__checkboxes">
               {value.map((perm: string) => (
-                <CustomCheckbox disabled={selected?.superAdmin} initialChecked={selected?.superAdmin || checkIfChecked(key, perm)} onCheckboxChange={(checked) => onCheckboxChange(checked, perm, key)} key={perm + selected?._id}>{Utils.initCap(perm)}</CustomCheckbox>
+                <CustomCheckbox disabled={selected?.superAdmin || (!userState.user?.role.superAdmin && !rolesPerm?.permissions.includes("EDIT"))} initialChecked={selected?.superAdmin || checkIfChecked(key, perm)} onCheckboxChange={(checked) => onCheckboxChange(checked, perm, key)} key={perm + selected?._id}>{Utils.initCap(perm)}</CustomCheckbox>
               ))}
             </Row>
           </Col>
@@ -146,7 +151,7 @@ function Roles() {
     return permissionRows;
   }
 
-  const deleteDisabled = !selected || !selected.deletable;
+  const deleteDisabled = (!userState.user?.role.superAdmin && !rolesPerm?.permissions.includes("DELETE")) || !selected || !selected.deletable;
 
   const onRoleBtnClick = () => {
     if (!!selected) {
@@ -175,7 +180,12 @@ function Roles() {
               <h2>Role ({roles.collection.length !== 0 ? roles.collection.length : null})</h2>
             </Col>
             <Col className="roles__add" xs={12}>
-              <Button onClick={onRoleBtnClick} disabled={selected ? !selected.deletable : false} className="roles__btn" icon={<PlusCircleOutlined />} size="small" type="primary">{!!selected ? "Edytuj" : "Dodaj"}</Button>
+              {!!selected ? (
+                <Button disabled={!userState.user?.role.superAdmin && !rolesPerm?.permissions.includes("CREATE")} onClick={onRoleBtnClick} className="roles__btn" icon={<PlusCircleOutlined />} size="small" type="primary">Edytuj</Button>
+
+              ) : (
+                <Button disabled={!userState.user?.role.superAdmin && !rolesPerm?.permissions.includes("EDIT")} onClick={onRoleBtnClick} className="roles__btn" icon={<PlusCircleOutlined />} size="small" type="primary">Dodaj</Button>
+              )}
               <Button onClick={onDelete} disabled={deleteDisabled} className="roles__btn btn--delete" icon={<DeleteOutlined />} size="small" type="primary">Usuń</Button>
             </Col>
           </Row>
@@ -192,7 +202,9 @@ function Roles() {
           </Scrollbars>
           <Row>
             <Col xs={24} className="roles__edit">
-              <Button onClick={savePermissions} className="roles__btn" icon={<PlusCircleOutlined />} type="primary">Zapisz</Button>
+              {!!selected ? (
+                <Button disabled={!userState.user?.role.superAdmin && !rolesPerm?.permissions.includes("EDIT")} onClick={savePermissions} className="roles__btn" icon={<PlusCircleOutlined />} type="primary">Zapisz</Button>
+              ) : null}
             </Col>
           </Row>
         </Col>
