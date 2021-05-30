@@ -30,14 +30,19 @@ class EbookModel extends BaseModel {
             throw new AppError(err.message, err.status);
         }
     }
-    
+
     async getAverageRating(documents) {
         try {
             await Promise.all(_.castArray(documents).map(async (document) => {
-                let documentRatings = await this.getModel("Review").find({ ebookId: document._id }).lean();
+                let documentRatings = await this.getModel("Review").find({ ebookId: document._id }).populate("creator", "name").lean();
                 if (documentRatings.length > 0) {
                     let sum = 0;
-                    _.each(documentRatings, (rating) => sum += rating.stars);
+                    _.each(documentRatings, (rating) => {
+                        if (rating && rating.creator._id.toString() === this.getLoggedUser()._id.toString()) {
+                            document.userRating = Object.assign({}, rating);
+                        }
+                        sum += rating.stars;
+                    });
                     document.nrOfRatings = _.size(documentRatings);
                     document.averageRating = _.round(sum / _.size(documentRatings), 1)
                 } else {
