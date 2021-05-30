@@ -33,12 +33,13 @@ class EbookModel extends BaseModel {
 
     async getAverageRating(documents) {
         try {
+            let loggedUser = this.getLoggedUser();
             await Promise.all(_.castArray(documents).map(async (document) => {
                 let documentRatings = await this.getModel("Review").find({ ebookId: document._id }).populate("creator", "name").lean();
                 if (documentRatings.length > 0) {
                     let sum = 0;
                     _.each(documentRatings, (rating) => {
-                        if (rating && rating.creator._id.toString() === this.getLoggedUser()._id.toString()) {
+                        if (rating.creator && loggedUser && rating.creator._id.toString() === loggedUser._id.toString()) {
                             document.userRating = Object.assign({}, rating);
                         }
                         sum += rating.stars;
