@@ -17,16 +17,25 @@ import { ResponsiveBreakpoint } from '../../utils/utils-types';
 // css
 import './navbar.less';
 import { AppState } from '../../store';
+import { useHistory } from 'react-router';
+import { logOut } from '../../store/user/actions';
 
 function Navbar() {
   const bp = Utils.getResponsiveBreakpoint();
   const size = bp === ResponsiveBreakpoint.XS ? "small" : "middle";
+  const history = useHistory();
 
   const token = useSelector((state: AppState) => state.user.token);
   const dispatch = useDispatch();
 
   const onButtonClick = (type: ModalType) => {
     dispatch(openModal(type));
+  }
+
+  const logOutClick = () => {
+    dispatch(logOut());
+    Utils.setToken('');
+    history.push('/');
   }
 
 
@@ -55,7 +64,7 @@ function Navbar() {
                   </>
                 )}
               </>
-            ) : null
+            ) : <Button size={size} onClick={logOutClick} ghost className="navbar__right-btn" icon={<UserAddOutlined />}>Wyloguj się</Button>
           }
         </Col>
       </Row>

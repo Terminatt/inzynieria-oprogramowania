@@ -263,7 +263,14 @@ const deleteUserFinished = (data: User[]) => {
   } as const
 }
 
+export const logOut = () => {
+  return {
+    type: CONS.LOG_OUT,
+  } as const
+}
+
 
 export type UserActions = ReturnType<typeof handleStarted | typeof handleFinished | typeof handleUserError | typeof loginUserFinished
-| typeof addToken | typeof getPermissionsFinished | typeof getUsersCollectionFinished | typeof getUserFinished | typeof updateUserFinished | typeof deleteUserFinished
+| typeof addToken | typeof getPermissionsFinished | typeof getUsersCollectionFinished | typeof getUserFinished | typeof updateUserFinished | typeof deleteUserFinished | 
+typeof logOut
 >

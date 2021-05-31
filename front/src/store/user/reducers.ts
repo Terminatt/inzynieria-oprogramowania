@@ -56,6 +56,13 @@ export default function userReducer(state = initialState, action: UserActions): 
         ...state,
         permissions: action.data
       }
+    case CONS.LOG_OUT:
+      return {
+        ...state,
+        user: undefined,
+        token: null,
+        permissions: []
+      }
     default:
       return state
   }
