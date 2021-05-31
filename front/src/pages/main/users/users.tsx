@@ -10,7 +10,7 @@ import { getRolesCollection } from '../../../store/roles/actions';
 
 // antd
 import { Button, Col, Row, Select, Table } from 'antd';
-import { BoldOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
 // custom
 import Loading from '../../../components/loading/loading';
@@ -63,7 +63,7 @@ function Users() {
       title: 'Płeć',
       dataIndex: 'sex',
       key: 'sex',
-      render: (text: string) => text === 'male' ? "Męzczyzna" : "Kobieta",
+      render: (text: string) => text === 'male' ? "Mężczyzna" : "Kobieta",
     },
     {
       title: 'Email',
