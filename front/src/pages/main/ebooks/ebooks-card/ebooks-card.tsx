@@ -99,7 +99,7 @@ function EbookCard(props: ComponentProps) {
         props.isAdmin || props.libraryPermission?.permissions.includes("DISPLAY") ? <Tooltip overlay="Dodaj do swojej biblioteczki"><PlusCircleOutlined onClick={onAddToLibrary} key="add" /></Tooltip> : null,
         props.isAdmin || props.permission?.permissions.includes("DELETE") ? <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}
         ><DeleteOutlined className="red" /></Popconfirm></Tooltip> : null,
-        props.isAdmin || props.reviewPermission?.permissions.includes("CREATE") ? <Tooltip overlay="Dodaj recenzje"><FormOutlined /></Tooltip> : null
+        props.isAdmin || props.reviewPermission?.permissions.includes("CREATE") ? <Tooltip overlay="Dodaj recenzje"><FormOutlined onClick={goToEbook} /></Tooltip> : null
       ]
     }
   }

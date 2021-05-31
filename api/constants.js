@@ -4,7 +4,7 @@ const PERMISSIONS = {
   "User": ['DISPLAY', 'EDIT', 'DELETE', 'BAN'],
   "Role": ['DISPLAY', 'CREATE', 'EDIT', 'DELETE'],
   "Library": ['DISPLAY', 'CREATE', 'EDIT', 'DELETE'],
-  "Review": ['DISPLAY', 'CREATE', 'EDIT', 'DELETE'],
+  "Review": ['DISPLAY', 'EDIT'],
 }
 module.exports = {
   PERMISSIONS

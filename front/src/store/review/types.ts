@@ -12,5 +12,6 @@ export interface Review extends BaseEntity {
   ebookId: Id;
   stars: number;
   comment: string;
+  creator: { name: string, _id: Id };
   
 }

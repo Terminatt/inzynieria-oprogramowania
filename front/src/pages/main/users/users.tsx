@@ -63,7 +63,7 @@ function Users() {
       title: 'Płeć',
       dataIndex: 'sex',
       key: 'sex',
-      render: (text: string) => text,
+      render: (text: string) => text === 'male' ? "Męzczyzna" : "Kobieta",
     },
     {
       title: 'Email',
@@ -78,7 +78,7 @@ function Users() {
       render: (data: Role, row: User) => (
         <Row>
           <Col xs={24}>
-            <Select onChange={(value) => changeRole(row._id, value, row)} style={{ width: '100%' }} defaultValue={data._id} showSearch>
+            <Select onChange={(value) => changeRole(row._id, value, row)} style={{ width: '100%' }} defaultValue={data?._id} showSearch>
               {roles.collection.map((el) => (
                 <Option key={el._id} value={el._id}>{el.name}</Option>
               ))}
@@ -93,10 +93,10 @@ function Users() {
       key: 'deletable',
       render: (data: any, row: User) => (
         <Row>
-          <Button disabled={!userState.user?.role.superAdmin && !user?.permissions.includes("BAN")} icon={<BoldOutlined />} className="user-action btn-warning" size="small">
+          {/* <Button disabled={!userState.user?.role?.superAdmin && !user?.permissions.includes("BAN")} icon={<BoldOutlined />} className="user-action btn-warning" size="small">
             Zbanuj
-          </Button>
-          <Button type="primary" onClick={() => deleteSelected(row._id)} icon={<DeleteOutlined />} className="user-action btn-delete" disabled={row.role.superAdmin || (!userState.user?.role.superAdmin && !user?.permissions.includes("DELETE"))} size="small">
+          </Button> */}
+          <Button type="primary" onClick={() => deleteSelected(row._id)} icon={<DeleteOutlined />} className="user-action btn-delete" disabled={row.role?.superAdmin || (!userState.user?.role?.superAdmin && !user?.permissions.includes("DELETE"))} size="small">
             Usuń
           </Button>
         </Row>

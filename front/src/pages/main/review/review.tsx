@@ -47,7 +47,7 @@ function Review() {
   const userState = useSelector((state: AppState) => state.user);
   const { permissions } = userState;
 
-  const library = permissions.find((el) => el.entityName === 'Review');
+  const review = permissions.find((el) => el.entityName === 'Review');
 
   const getBaseUrl = () => {
     return process.env.REACT_APP_PROXY_API || 'http://localhost:3001/';
@@ -106,6 +106,14 @@ function Review() {
     }))
   }, [id, dispatch, userState.user])
 
+  useEffect(() => {
+    form.setFieldsValue({
+      "stars": reviews.selected?.stars,
+      "comment": reviews.selected?.comment,
+    })
+  }, [reviews.selected, form])
+
+
   return (
     <Row className="scroll-container">
       <Loading isLoading={ebooks.isLoading || reviews.isLoading} />
@@ -127,13 +135,13 @@ function Review() {
                 <h3>Recenzja:</h3>
                 <Form onFinish={onFinish} {...layout} form={form}>
                   <Form.Item initialValue={reviews.selected ? reviews.selected.stars : 1} style={{ marginBottom: '6px' }} name="stars">
-                    <Rate />
+                    <Rate disabled={!userState.user?.role.superAdmin && !review?.permissions.includes("EDIT")} />
                   </Form.Item>
                   <Form.Item initialValue={reviews.selected?.comment} label="Komentarz na temat książki" name="comment" rules={[{ message: "To pole jest wymagane", required: true }]}>
-                    <TextArea />
+                    <TextArea disabled={!userState.user?.role.superAdmin && !review?.permissions.includes("EDIT")} />
                   </Form.Item>
                   <Form.Item>
-                    <Button disabled={ebooks.isLoading || reviews.isLoading} loading={ebooks.isLoading || reviews.isLoading} type="primary" htmlType="submit">
+                    <Button disabled={(!userState.user?.role.superAdmin && !review?.permissions.includes("EDIT")) || ebooks.isLoading || reviews.isLoading} loading={ebooks.isLoading || reviews.isLoading} type="primary" htmlType="submit">
                       Zapisz
                     </Button>
                   </Form.Item>
@@ -144,16 +152,15 @@ function Review() {
           <Row className="reviews">
             <Col xs={24}>
               <Scrollbars>
-                <List key={uuid.v4()} bordered size="small" dataSource={reviews.collection} renderItem={(el) => (
+                <List key={uuid.v4()} bordered size="small" dataSource={collection} renderItem={(el) => (
                   <List.Item key={el._id}>
-                    <List.Item.Meta title={el.stars} description={
+                    <List.Item.Meta title={el.creator.name} description={
                       <>
                         <div>{renderStars()}</div>
                         <div>{el.comment}</div>
                       </>
                     } />
                   </List.Item>
-
                 )}>
                 </List>
               </Scrollbars>
