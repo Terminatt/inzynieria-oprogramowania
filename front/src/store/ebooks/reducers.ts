@@ -5,6 +5,8 @@ import * as CONS from "./constants";
 
 const initialState: EbooksState = {
   collection: [],
+  userCollection: [],
+  userSelected: null,
   selected: null,
   isLoading: false,
   error: null,
@@ -41,6 +43,16 @@ export default function ebookskReducer(state = initialState, action: EbookAction
       return {
         ...state,
         selected: action.data,
+      }
+    case CONS.GET_USER_EBOOKS:
+      return {
+        ...state,
+        userCollection: action.data
+      }
+    case CONS.SELECT_USER_EBOOK:
+      return {
+        ...state,
+        userSelected: action.data
       }
     default:
       return state

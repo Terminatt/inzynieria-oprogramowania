@@ -41,4 +41,8 @@ export default abstract class Utils {
       document.documentElement.clientWidth
     );
   }
+
+  public static initCap = (text: string) => {
+    return text.toLowerCase().split(/\s|_/).map((el) => el[0].toUpperCase() + el.slice(1)).join(" ");
+  }
 }

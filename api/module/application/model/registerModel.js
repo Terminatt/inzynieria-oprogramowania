@@ -4,6 +4,8 @@ const config = require('../../../config/config');
 const bcrypt = require('bcrypt');
 const moment = require("moment");
 const MailService = require("../service/mailService");
+const mongoose = require('mongoose');
+const roleSchema = require('../schema/role');
 
 class RegisterModel extends BaseModel {
     constructor(req) {
@@ -77,6 +79,11 @@ class RegisterModel extends BaseModel {
 
             if ('email' in data) {
                 document = await this.setEmail(document, data.email);
+            }
+
+            const userRole = await mongoose.model('Role', roleSchema).findOne({name: 'User'});
+            if (userRole) {
+                document.role = userRole._id;
             }
 
             return document;

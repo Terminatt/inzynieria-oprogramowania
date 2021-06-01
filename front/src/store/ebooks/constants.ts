@@ -9,4 +9,11 @@ export const GET_EBOOK = "GET_EBOOK";
 export const ADD_EBOOK = "ADD_EBOOK";
 export const EDIT_EBOOK = "EDIT_EBOOK";
 
+export const GET_USER_EBOOKS = "GET_USER_EBOOKS";
+export const GET_USER_EBOOK = "GET_USER_EBOOK";
+export const ADD_USER_EBOOK = "ADD_USER_EBOOK";
+export const EDIT_USER_EBOOK = "EDIT_USER_EBOOK";
+
+
 export const SELECT_EBOOK = "SELECT_EBOOK";
+export const SELECT_USER_EBOOK = "SELECT_USER_EBOOK";

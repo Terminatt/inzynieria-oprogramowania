@@ -16,7 +16,7 @@ import Main from './pages/main/main';
 
 // utils
 import Utils from './utils/utls';
-import { isAuth } from './store/user/actions';
+import { getPermissions, isAuth } from './store/user/actions';
 import Footer from './components/footer/footer';
 import { Layout } from 'antd';
 
@@ -30,6 +30,7 @@ function App() {
     if (token) {
       dispatch(isAuth(token, () => {
         history.push("/main");
+        dispatch(getPermissions());
       }))
     }
 

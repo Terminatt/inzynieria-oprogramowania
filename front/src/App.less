@@ -32,6 +32,20 @@ h6 {
 .btn-delete {
   background-color: @color-error  !important;
   border-color: @color-error  !important;
+
+  &:hover {
+    background-color: lighten(@color-error, 5%) !important;
+  }
+}
+
+.btn-warning {
+  background-color: #d8a603 !important;
+  border-color: #d8a603 !important;
+  color: @color-white  !important;
+
+  &:hover {
+    background-color: lighten(#d8a603, 5%) !important;
+  }
 }
 
 // card
@@ -63,6 +77,11 @@ h6 {
     cursor: pointer;
     max-height: 200px;
   }
+
+  &__title:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 
@@ -83,4 +102,23 @@ h6 {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+
+.btn--delete {
+  background-color: @color-error  !important;
+  border-color: @color-error  !important;
+
+  &:hover {
+    background-color: lighten(@color-error, 5%) !important;
+  }
+}
+
+.ant-btn[disabled] {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+}
+
+.scrollbar>div {
+  margin-bottom: -16px !important;
+  margin-right: -16px !important;
 }

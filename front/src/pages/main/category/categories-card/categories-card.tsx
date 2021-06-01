@@ -9,6 +9,7 @@ import { EditOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/ic
 // css
 import "./categories-card.less";
 import { Category } from '../../../../store/category/types';
+import { Permission } from '../../../../store/roles/types';
 
 // components
 
@@ -18,6 +19,9 @@ interface ComponentProps {
   onEditClick?: (data?: Category) => void;
 
   onDelete?: (data?: Category) => void;
+
+  permission?: Permission;
+  isAdmin?: boolean;
   addCard?: boolean;
   className?: string;
 }
@@ -48,8 +52,8 @@ function CategoriesCard(props: ComponentProps) {
     <Card className={["card", addCard ? "add" : "", props.className ? props.className : ""].join(" ")}
       onClick={onClick}
       actions={addCard ? [] : [
-        <EditOutlined onClick={onEditClick} key="edit" />,
-        <Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tę kategorię?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm>
+        props.isAdmin || props.permission?.permissions.includes("EDIT") ? <EditOutlined onClick={onEditClick} key="edit" /> : null,
+        props.isAdmin || props.permission?.permissions.includes("DELETE") ? <Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tę kategorię?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm> : null
       ]
       }
     >

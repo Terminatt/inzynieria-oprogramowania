@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const userSchema = require("../module/application/schema/user");
 const _ = require("lodash");
+const aclSchema = require("../module/application/schema/acl");
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res, next, entity, action) => {
   try {
     const token = req.headers['authorization'];
     if (token) {
@@ -13,7 +14,8 @@ module.exports = async (req, res, next) => {
         if (mongoose.modelNames().indexOf("User") === -1) {
           mongoose.model("User", userSchema);
         }
-        let loggedUser = await mongoose.model("User").findOne({ _id: decoded._id }).lean();
+        let loggedUser = await mongoose.model("User").findOne({ _id: decoded._id })
+          .populate('role');
         if (!loggedUser) {
           throw new AppError("Brak autoryzacji", 401);
         } else {
@@ -23,6 +25,16 @@ module.exports = async (req, res, next) => {
           delete loggedUser.password;
           loggedUser._id = loggedUser._id.toString();
           req.loggedUser = loggedUser;
+        }
+        if (!loggedUser.role.superAdmin && action) {
+          const acl = await mongoose.model("Acl", aclSchema).findOne({
+            entityName: entity,
+            role: loggedUser.role._id
+          });
+
+          if (!acl || !acl.permissions.includes(action)) {
+            throw new AppError("Brak autoryzacji", 401);
+          }
         }
         next();
       } else {

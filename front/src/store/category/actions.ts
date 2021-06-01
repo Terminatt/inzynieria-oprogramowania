@@ -61,7 +61,6 @@ export const getCategory= (id: Id, cb?: () => void) => {
       const results = await axios.get<BaseResponse<Category>>(`/ebook/category/${id}`);
       if(results.data.documents) {
         dispatch(getCategoryFinished(results.data.documents))
-
       }
       dispatch(handleCategoryFinished());
       if(cb) {

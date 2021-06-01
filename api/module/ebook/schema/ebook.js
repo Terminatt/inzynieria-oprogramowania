@@ -28,8 +28,7 @@ const ebookSchema = baseSchema.generateSchema(
         publisher: { type: String },
         releaseDate: { type: String },
         numberOfPages: { type: Number, min: [1, "Ebook nie może mieć mniej stron niż 1"] },
-        coverImage: { type: String }, //Link do zdjęcia okładki
-        file: { type: String } //Link do pliku ebooka
+        coverImage: { type: String } //Link do zdjęcia okładki
     }, {
         collection: 'ebook_ebook'
     })

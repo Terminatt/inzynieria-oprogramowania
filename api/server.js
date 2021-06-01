@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const applicationModuleConfig = require("./module/application/config");
 const ebookModuleConfig = require("./module/ebook/config");
+const userModuleConfig = require("./module/user/config");
 let configInit = dotenv.config();
 if (configInit.error) {
     throw "Niepoprawna konfiguracja pliku '.env'."
@@ -16,6 +17,7 @@ if (configInit.error) {
 
 const config = require('./config/config');
 const deletedAtPlugin = require('./module/application/plugin/deletedAtPlugin');
+const { initRoles } = require('./utils/utils');
 
 //Główne połączenie do bazy
 mongoose.connect(`mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_DBNAME}`, config.dbOptions);
@@ -61,6 +63,7 @@ app.get('/media/:name', (req, res, next) => {
 
 app.use("/", applicationModuleConfig);
 app.use("/ebook", ebookModuleConfig);
+app.use("/user", userModuleConfig);
 
 //Zwrotka 404 dla nieistniejących routów
 app.use((req, res, next) => {
@@ -92,6 +95,8 @@ app.use((error, req, res, next) => {
         });
     }
 });
+
+initRoles();
 
 app.listen(process.env.PORT || 3001, null, () => {
     console.log(`Server is listening on port ${process.env.PORT || 3001}`)

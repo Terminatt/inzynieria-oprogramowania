@@ -7,7 +7,7 @@ import { Button, Form, Input, Select } from 'antd';
 
 // redux
 import { AppState } from '../../store';
-import { loginUser, registerUser, handleUserError } from '../../store/user/actions';
+import { loginUser, registerUser, handleUserError, getPermissions } from '../../store/user/actions';
 import { Sex } from '../../store/user/types';
 
 // css
@@ -69,6 +69,7 @@ function Credentials() {
       dispatch(loginUser(payload, () => {
         onClose();
         history.push("/main")
+        dispatch(getPermissions());
       }))
     } else {
       dispatch(registerUser(payload, onClose))
