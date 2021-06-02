@@ -88,6 +88,8 @@ class LibraryModel extends BaseModel {
         try {
             let result = await super.getList(params, { creator: mongoose.Types.ObjectId(this.getLoggedUser()._id) });
             result.documents = await this.joinEbookData(result.documents);
+            
+            result.documents = result.documents.filter((el) => !!el.ebook);
 
             for (const el of result.documents) {
                 el.ebook = await this.getAverageRating(el.ebook);
