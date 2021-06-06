@@ -15,7 +15,8 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 axiosInstance.interceptors.response.use(undefined, (error) => {
-    notification.error({message: error.message, duration: 1});
+    const message: string[] = Object.values(error.response.data.errors);
+    notification.error({message: message[0], duration: 1});
 })
 
 
