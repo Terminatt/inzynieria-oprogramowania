@@ -81,7 +81,7 @@ function EbookCard(props: ComponentProps) {
   };
 
   const goToEbook = () => {
-    if (props.reviewPermission?.permissions.includes("DISPLAY")) {
+    if (props.isAdmin || props.reviewPermission?.permissions.includes("DISPLAY")) {
       history.push(`/main/ebook/${props.data?._id}`)
     }
   }
