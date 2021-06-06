@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../../store';
 import { Ebook } from '../../../store/ebooks/types';
 import EbookCard from '../ebooks/ebooks-card/ebooks-card';
-import { deleteEbook, getEbooksCollection, selectEbook } from '../../../store/ebooks/actions';
+import { addUserEbook, deleteEbook, getEbooksCollection, selectEbook } from '../../../store/ebooks/actions';
 import { openModal } from '../../../store/modals/actions';
 import { ModalType } from '../../../store/modals/types';
 
@@ -35,6 +35,7 @@ function Dashboard() {
 
   const ebook = permissions.find((el) => el.entityName === 'Ebook');
   const library = permissions.find((el) => el.entityName === 'Library');
+  const review = permissions.find((el) => el.entityName === "Review");
 
   const [dict, setDict] = useState<EbookDict>({});
   const [parsingLoading, setParsingLoading] = useState<boolean>(false);
@@ -98,10 +99,16 @@ function Dashboard() {
     return elements;
   }
 
+  const onAddToLibrary = (data?: Ebook) => {
+    if (data) {
+      dispatch(addUserEbook(data._id))
+    }
+  }
+
   const renderEbooks = (ebooks: Ebook[]) => {
     return ebooks.map((el) => (
       <Col key={el._id} className="item-card" xs={6}>
-        <EbookCard isAdmin={userState.user?.role.superAdmin} libraryPermission={library} permission={ebook} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
+        <EbookCard reviewPermission={review} isAdmin={userState.user?.role.superAdmin} addToLibrary={onAddToLibrary} libraryPermission={library} permission={ebook} onDelete={onDelete} onEditClick={onEditClick} className="dashboard__card" data={el} />
       </Col>
     ))
   }

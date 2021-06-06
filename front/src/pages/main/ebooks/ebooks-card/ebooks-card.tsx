@@ -2,7 +2,7 @@
 import React from 'react';
 
 // antd
-import { Card, Popconfirm, Tooltip, Upload } from 'antd';
+import { Card, notification, Popconfirm, Tooltip, Upload } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { EditOutlined, PlusCircleOutlined, DeleteOutlined, UploadOutlined, BookOutlined, StarOutlined, StarFilled, FormOutlined } from '@ant-design/icons';
 
@@ -81,7 +81,9 @@ function EbookCard(props: ComponentProps) {
   };
 
   const goToEbook = () => {
-    history.push(`/main/ebook/${props.data?._id}`)
+    if (props.reviewPermission?.permissions.includes("DISPLAY")) {
+      history.push(`/main/ebook/${props.data?._id}`)
+    }
   }
 
   const renderActions = () => {
@@ -92,7 +94,7 @@ function EbookCard(props: ComponentProps) {
         props.isAdmin || props.libraryPermission?.permissions.includes("EDIT") ? <Upload fileList={[]} beforeUpload={(file) => handleUpload(file, "file")}><UploadOutlined ></UploadOutlined></Upload> : null,
         props.isAdmin || props.libraryPermission?.permissions.includes("DELETE") ? <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz odpiąć tego ebooka?" onConfirm={onDelete}><DeleteOutlined className="red" /></Popconfirm></Tooltip> : null,
         props.isAdmin || props.reviewPermission?.permissions.includes("EDIT") ? <Tooltip overlay="Dodaj recenzje"><FormOutlined onClick={goToEbook} /></Tooltip> : null
-      ]
+      ].filter((el) => el !== null)
     } else {
       return [
         props.isAdmin || props.permission?.permissions.includes("EDIT") ? <Tooltip overlay="Edytuj"><EditOutlined onClick={onEditClick} key="edit" /></Tooltip> : null,
@@ -100,7 +102,7 @@ function EbookCard(props: ComponentProps) {
         props.isAdmin || props.permission?.permissions.includes("DELETE") ? <Tooltip overlay="Usuń"><Popconfirm okButtonProps={{ type: "primary", className: "btn-delete" }} okText="Usuń" title="Chcesz usunąć tego ebooka?" onConfirm={onDelete}
         ><DeleteOutlined className="red" /></Popconfirm></Tooltip> : null,
         props.isAdmin || props.reviewPermission?.permissions.includes("EDIT") ? <Tooltip overlay="Dodaj recenzje"><FormOutlined onClick={goToEbook} /></Tooltip> : null
-      ]
+      ].filter((el) => el !== null)
     }
   }
 
