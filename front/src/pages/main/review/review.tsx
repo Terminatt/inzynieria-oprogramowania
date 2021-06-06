@@ -139,7 +139,7 @@ function Review() {
               <Col className="review" xs={24}>
                 <h3>Recenzja:</h3>
                 <Form onFinish={onFinish} {...layout} form={form}>
-                  <Form.Item rules={[{ message: "Ocena jest wymagana", required: true }]} initialValue={reviews.selected ? reviews.selected.stars : 1} style={{ marginBottom: '6px' }} name="stars">
+                  <Form.Item rules={[{ min: 1, message: "Minimalna ocena wynosi 1" }, { message: "Ocena jest wymagana", required: true }]} initialValue={reviews.selected ? reviews.selected.stars : 1} style={{ marginBottom: '6px' }} name="stars">
                     <Rate disabled={!userState.user?.role.superAdmin && !review?.permissions.includes("EDIT")} />
                   </Form.Item>
                   <Form.Item initialValue={reviews.selected?.comment} label="Komentarz na temat książki" name="comment" rules={[{ message: "To pole jest wymagane", required: true }]}>
