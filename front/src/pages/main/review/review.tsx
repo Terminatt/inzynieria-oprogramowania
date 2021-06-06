@@ -53,15 +53,15 @@ function Review() {
     return process.env.REACT_APP_PROXY_API || 'http://localhost:3001/';
   }
 
-  const renderStars = () => {
+  const renderStars = (rating?: number | null) => {
     const stars: React.ReactElement[] = [];
-    if (selected && typeof selected.averageRating === 'number') {
+    if (selected && typeof rating === 'number') {
 
-      for (let i = 0; i < Math.round(selected.averageRating); i++) {
+      for (let i = 0; i < Math.round(rating); i++) {
         stars.push(<StarFilled key={uuid.v4()} style={{ color: 'gold' }} />)
       }
 
-      for (let i = 0; i < 5 - Math.round(selected.averageRating); i++) {
+      for (let i = 0; i < 5 - Math.round(rating); i++) {
         stars.push(<StarOutlined key={uuid.v4()} />)
       }
 
@@ -73,7 +73,12 @@ function Review() {
     return stars
   }
 
+
   const onFinish = (values: FormValues) => {
+    if (!values.stars) {
+      values.stars = 1;
+    }
+
     if (reviews.selected) {
       dispatch(updateReview(reviews.selected._id, { ...values, }, () => {
         notification.success({ message: "Twoja recenzja została zaktualizowana" })
@@ -129,12 +134,12 @@ function Review() {
                 <div className="info">{selected?.author}</div>
                 <div>Ilość stron: {selected?.numberOfPages}</div>
                 <div>Wydawca: {selected?.publisher}</div>
-                <div style={{ width: 'max-content', position: 'relative' }}>{renderStars()}  <span style={{ position: 'absolute', bottom: "0.5px" }}>({selected?.averageRating ? selected?.nrOfRatings : null})</span></div>
+                <div style={{ width: 'max-content', position: 'relative' }}>{renderStars(selected?.averageRating)}  <span style={{ position: 'absolute', bottom: "0.5px" }}>({selected?.averageRating ? selected?.nrOfRatings : null})</span></div>
               </Col>
               <Col className="review" xs={24}>
                 <h3>Recenzja:</h3>
                 <Form onFinish={onFinish} {...layout} form={form}>
-                  <Form.Item initialValue={reviews.selected ? reviews.selected.stars : 1} style={{ marginBottom: '6px' }} name="stars">
+                  <Form.Item rules={[{ message: "Ocena jest wymagana", required: true }]} initialValue={reviews.selected ? reviews.selected.stars : 1} style={{ marginBottom: '6px' }} name="stars">
                     <Rate disabled={!userState.user?.role.superAdmin && !review?.permissions.includes("EDIT")} />
                   </Form.Item>
                   <Form.Item initialValue={reviews.selected?.comment} label="Komentarz na temat książki" name="comment" rules={[{ message: "To pole jest wymagane", required: true }]}>
@@ -156,7 +161,7 @@ function Review() {
                   <List.Item key={el._id}>
                     <List.Item.Meta title={el.creator.name} description={
                       <>
-                        <div>{renderStars()}</div>
+                        <div>{renderStars(el.stars)}</div>
                         <div>{el.comment}</div>
                       </>
                     } />

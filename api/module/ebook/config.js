@@ -74,7 +74,7 @@ Router.get("/review/:id", (req, res, next) => requireAuth(req, res, next, "Revie
     Controller.get(req, res, next);
 });
 
-Router.post("/review", (req, res, next) => requireAuth(req, res, next, "Review", "CREATE"), cpUpload, (req, res, next) => {
+Router.post("/review", (req, res, next) => requireAuth(req, res, next, "Review", "EDIT"), cpUpload, (req, res, next) => {
     const Controller = new ReviewController(req);
     Controller.create(req, res, next);
 });
